@@ -1,0 +1,8 @@
+{
+  "name": "Bé Tập Đánh Vần Tiếng Việt",
+  "description": "Ứng dụng dạy trẻ 4-6 tuổi và học sinh lớp 1 tập đánh vần, phát âm và luyện đọc tiếng Việt chuẩn theo giáo trình NXB Hà Nội với giọng đọc AI truyền cảm.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
