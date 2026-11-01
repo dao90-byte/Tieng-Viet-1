@@ -166,6 +166,148 @@ export function analyzeSyllable(rawWord: string): SpellingAnalysis {
 
   const steps: { text: string; label: string }[] = [];
 
+  // Bảng phân rã đánh vần các vần đôi / vần ghép khi không có âm đầu (ví dụ ay, áy, ây, eo, ao...)
+  const RIME_SPELLING_MAP: Record<string, { steps: { text: string; label: string }[]; script: string }> = {
+    ay: {
+      steps: [
+        { text: 'a', label: 'a' },
+        { text: 'y', label: 'y' },
+        { text: 'ay', label: 'ay' },
+      ],
+      script: 'a - y - ay',
+    },
+    ây: {
+      steps: [
+        { text: 'ớ', label: 'â' },
+        { text: 'y', label: 'y' },
+        { text: 'ây', label: 'ây' },
+      ],
+      script: 'â - y - ây',
+    },
+    eo: {
+      steps: [
+        { text: 'e', label: 'e' },
+        { text: 'o', label: 'o' },
+        { text: 'eo', label: 'eo' },
+      ],
+      script: 'e - o - eo',
+    },
+    ao: {
+      steps: [
+        { text: 'a', label: 'a' },
+        { text: 'o', label: 'o' },
+        { text: 'ao', label: 'ao' },
+      ],
+      script: 'a - o - ao',
+    },
+    au: {
+      steps: [
+        { text: 'a', label: 'a' },
+        { text: 'u', label: 'u' },
+        { text: 'au', label: 'au' },
+      ],
+      script: 'a - u - au',
+    },
+    âu: {
+      steps: [
+        { text: 'ớ', label: 'â' },
+        { text: 'u', label: 'u' },
+        { text: 'âu', label: 'âu' },
+      ],
+      script: 'â - u - âu',
+    },
+    iu: {
+      steps: [
+        { text: 'i', label: 'i' },
+        { text: 'u', label: 'u' },
+        { text: 'iu', label: 'iu' },
+      ],
+      script: 'i - u - iu',
+    },
+    êu: {
+      steps: [
+        { text: 'ê', label: 'ê' },
+        { text: 'u', label: 'u' },
+        { text: 'êu', label: 'êu' },
+      ],
+      script: 'ê - u - êu',
+    },
+    oi: {
+      steps: [
+        { text: 'o', label: 'o' },
+        { text: 'i', label: 'i' },
+        { text: 'oi', label: 'oi' },
+      ],
+      script: 'o - i - oi',
+    },
+    ai: {
+      steps: [
+        { text: 'a', label: 'a' },
+        { text: 'i', label: 'i' },
+        { text: 'ai', label: 'ai' },
+      ],
+      script: 'a - i - ai',
+    },
+    ôi: {
+      steps: [
+        { text: 'ô', label: 'ô' },
+        { text: 'i', label: 'i' },
+        { text: 'ôi', label: 'ôi' },
+      ],
+      script: 'ô - i - ôi',
+    },
+    ơi: {
+      steps: [
+        { text: 'ơ', label: 'ơ' },
+        { text: 'i', label: 'i' },
+        { text: 'ơi', label: 'ơi' },
+      ],
+      script: 'ơ - i - ơi',
+    },
+    ui: {
+      steps: [
+        { text: 'u', label: 'u' },
+        { text: 'i', label: 'i' },
+        { text: 'ui', label: 'ui' },
+      ],
+      script: 'u - i - ui',
+    },
+    ưi: {
+      steps: [
+        { text: 'ư', label: 'ư' },
+        { text: 'i', label: 'i' },
+        { text: 'ưi', label: 'ưi' },
+      ],
+      script: 'ư - i - ưi',
+    },
+    ia: {
+      steps: [
+        { text: 'i', label: 'i' },
+        { text: 'a', label: 'a' },
+        { text: 'ia', label: 'ia' },
+      ],
+      script: 'i - a - ia',
+    },
+    ua: {
+      steps: [
+        { text: 'u', label: 'u' },
+        { text: 'a', label: 'a' },
+        { text: 'ua', label: 'ua' },
+      ],
+      script: 'u - a - ua',
+    },
+    ưa: {
+      steps: [
+        { text: 'ư', label: 'ư' },
+        { text: 'a', label: 'a' },
+        { text: 'ưa', label: 'ưa' },
+      ],
+      script: 'ư - a - ưa',
+    },
+  };
+
+  let spellingScript = '';
+
   if (onset && rime) {
     steps.push({ text: onsetSound, label: onset });
     steps.push({ text: rime, label: rime });
@@ -174,29 +316,35 @@ export function analyzeSyllable(rawWord: string): SpellingAnalysis {
       steps.push({ text: toneName, label: `dấu ${toneName}` });
       steps.push({ text: clean, label: clean });
     }
-  } else if (!onset && rime) {
-    steps.push({ text: rime, label: rime });
-    if (toneName !== 'ngang') {
-      steps.push({ text: toneName, label: `dấu ${toneName}` });
-      steps.push({ text: clean, label: clean });
-    }
-  } else {
-    steps.push({ text: clean, label: clean });
-  }
 
-  let spellingScript = '';
-  if (onset && rime) {
     if (toneName === 'ngang') {
       spellingScript = `${onsetSound} - ${rime} - ${baseSyllable}`;
     } else {
       spellingScript = `${onsetSound} - ${rime} - ${baseSyllable} - ${toneName} - ${clean}`;
     }
-  } else {
-    if (toneName === 'ngang') {
-      spellingScript = clean;
+  } else if (!onset && rime) {
+    if (RIME_SPELLING_MAP[rime]) {
+      steps.push(...RIME_SPELLING_MAP[rime].steps);
+      if (toneName !== 'ngang') {
+        steps.push({ text: toneName, label: `dấu ${toneName}` });
+        steps.push({ text: clean, label: clean });
+        spellingScript = `${RIME_SPELLING_MAP[rime].script} - ${toneName} - ${clean}`;
+      } else {
+        spellingScript = RIME_SPELLING_MAP[rime].script;
+      }
     } else {
-      spellingScript = `${unaccented} - ${toneName} - ${clean}`;
+      steps.push({ text: rime, label: rime });
+      if (toneName !== 'ngang') {
+        steps.push({ text: toneName, label: `dấu ${toneName}` });
+        steps.push({ text: clean, label: clean });
+        spellingScript = `${unaccented} - ${toneName} - ${clean}`;
+      } else {
+        spellingScript = clean;
+      }
     }
+  } else {
+    steps.push({ text: clean, label: clean });
+    spellingScript = clean;
   }
 
   return {
@@ -209,37 +357,67 @@ export function analyzeSyllable(rawWord: string): SpellingAnalysis {
   };
 }
 
-// Khởi tạo danh sách giọng đọc của trình duyệt
-let cachedVoices: SpeechSynthesisVoice[] = [];
-function updateVoicesList() {
-  if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
-    cachedVoices = window.speechSynthesis.getVoices();
+// Khởi tạo danh sách giọng đọc của trình duyệt và lưu trữ giọng ưu tiên
+const VOICE_STORAGE_KEY = 'be_tap_danh_van_voice_uri';
+
+function getStoredVoiceUri(): string | null {
+  if (typeof window === 'undefined') return null;
+  try {
+    return localStorage.getItem(VOICE_STORAGE_KEY);
+  } catch {
+    return null;
   }
+}
+
+function saveStoredVoiceUri(uri: string) {
+  if (typeof window === 'undefined') return;
+  try {
+    localStorage.setItem(VOICE_STORAGE_KEY, uri);
+  } catch {
+    // ignore
+  }
+}
+
+let cachedVoices: SpeechSynthesisVoice[] = [];
+
+function updateVoicesList(): SpeechSynthesisVoice[] {
+  if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+    const list = window.speechSynthesis.getVoices();
+    if (list && list.length > 0) {
+      cachedVoices = list;
+    }
+  }
+  return cachedVoices;
 }
 
 if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
   updateVoicesList();
-  window.speechSynthesis.onvoiceschanged = updateVoicesList;
+  window.speechSynthesis.onvoiceschanged = () => {
+    updateVoicesList();
+  };
 }
 
 export function getAvailableVoices(): SpeechSynthesisVoice[] {
-  updateVoicesList();
-  return cachedVoices.filter(v => v.lang.startsWith('vi') || v.lang.includes('VN'));
+  const voices = updateVoicesList();
+  return voices.filter(v => v.lang.startsWith('vi') || v.lang.includes('VN'));
 }
 
 export function setPreferredReadingVoice(uri: string | null) {
   preferredReadingVoiceUri = uri;
+  if (uri) {
+    saveStoredVoiceUri(uri);
+  }
 }
 
 export function getPreferredReadingVoice(): string | null {
-  return preferredReadingVoiceUri;
+  return preferredReadingVoiceUri || getStoredVoiceUri();
 }
 
-// Từ điển phát âm chính xác các chữ cái đơn & chữ ghép khi đứng riêng lẻ
+// Từ điển phát âm chính xác các chữ cái đơn, nguyên âm & chữ ghép khi đứng riêng lẻ
 const STANDALONE_LETTER_SOUNDS: Record<string, string> = {
   p: 'pờ',
   q: 'qui',
-  y: 'i dài',
+  y: 'y',
   k: 'ca',
   d: 'dờ',
   đ: 'đờ',
@@ -266,6 +444,18 @@ const STANDALONE_LETTER_SOUNDS: Record<string, string> = {
   qu: 'quờ',
   th: 'thờ',
   tr: 'trờ',
+  // Nguyên âm đơn
+  a: 'a',
+  ă: 'á',
+  â: 'ớ',
+  e: 'e',
+  ê: 'ê',
+  i: 'i ngắn',
+  o: 'o',
+  ô: 'ô',
+  ơ: 'ơ',
+  u: 'u',
+  ư: 'ư',
 };
 
 export function cleanTextForVietnameseSpeech(input: string): string {
@@ -325,18 +515,18 @@ export function speakWebSpeech(
     utterance.rate = rate;
     utterance.pitch = 1.06;
 
-    updateVoicesList();
+    let voices = updateVoicesList();
 
-    // 1. Nếu chỉ định cụ thể voiceURI hoặc có preferredReadingVoiceUri
-    const targetUri = voiceURI || preferredReadingVoiceUri;
-    if (targetUri) {
-      const matched = cachedVoices.find((v) => v.voiceURI === targetUri);
+    // 1. Nếu chỉ định cụ thể voiceURI hoặc có preferredReadingVoiceUri / lưu trong localStorage
+    const targetUri = voiceURI || preferredReadingVoiceUri || getStoredVoiceUri();
+    if (targetUri && voices.length > 0) {
+      const matched = voices.find((v) => v.voiceURI === targetUri);
       if (matched) utterance.voice = matched;
     }
 
     // 2. Nếu chưa có, tự động chọn giọng nữ tiếng Việt truyền cảm, dịu dàng
-    if (!utterance.voice) {
-      const viVoices = cachedVoices.filter(
+    if (!utterance.voice && voices.length > 0) {
+      const viVoices = voices.filter(
         (v) => v.lang.startsWith('vi') || v.lang.includes('VN')
       );
       const naturalFemaleVoice = viVoices.find(
@@ -351,6 +541,7 @@ export function speakWebSpeech(
       utterance.voice = naturalFemaleVoice || viVoices[0] || null;
       if (utterance.voice && !preferredReadingVoiceUri) {
         preferredReadingVoiceUri = utterance.voice.voiceURI;
+        saveStoredVoiceUri(utterance.voice.voiceURI);
       }
     }
 
@@ -443,9 +634,9 @@ export async function spellOutSyllable(
   for (let i = 0; i < analysis.steps.length; i++) {
     const step = analysis.steps[i];
     onStepChange?.(step, i);
-    // Tốc độ đánh vần nhanh, dứt khoát (rate 1.1), phát tức thì bằng giọng chuẩn đã chọn
-    await speakWebSpeech(step.text, 1.1, preferredReadingVoiceUri);
-    // Khoảng dừng nhịp điệu ngắn 65ms dứt khoát
-    await new Promise(r => setTimeout(r, 65));
+    // Tốc độ đánh vần chuẩn mực sư phạm (rate 0.95), tròn vành rõ chữ, phân biệt sắc nét e và ê
+    await speakWebSpeech(step.text, 0.95, preferredReadingVoiceUri);
+    // Khoảng dừng nhịp điệu tự nhiên 120ms giúp trẻ nhỏ cảm nhận rõ từng âm tiết
+    await new Promise(r => setTimeout(r, 120));
   }
 }

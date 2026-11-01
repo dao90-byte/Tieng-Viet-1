@@ -2351,24 +2351,624 @@ export const RIME_READING_LESSONS: RimeReadingLesson[] = [
       "title": "Bé vẽ tranh quê hương",
       "text": "Chủ nhật, bé ngồi nắn nót vẽ một bức tranh làng quê thật đẹp. Giữa bức tranh là dòng kênh xanh biếc uốn lượn quanh lũy tre làng. Bố mẹ khen bé vẽ khéo và rất có năng khiếu nghệ thuật."
     }
+  },
+  {
+    "id": "uu_uou",
+    "rimes": ["ưu", "ươu"],
+    "title": "ưu - ươu",
+    "bookPage": 110,
+    "illustratedWords": [
+      { "word": "hươu sao", "image": "🦌" },
+      { "word": "cái ốc bươu", "image": "🐌" },
+      { "word": "con khướu", "image": "🐦" },
+      { "word": "lựu đỏ", "image": "🍎" }
+    ],
+    "practiceWords": ["hươu sao", "con khướu", "mưu trí", "khứu giác", "ốc bươu", "ngửi khướu"],
+    "sentences": [
+      "Chú hươu sao có đôi sừng thật đẹp.",
+      "Con chim khướu hót véo von trong lùm cây.",
+      "Bé rất yêu quý các loài muông thú."
+    ],
+    "passage": {
+      "title": "Chú hươu sao",
+      "text": "Trong khu rừng xanh mát, chú hươu sao thong dong gặm cỏ non bên bờ suối. Bộ lông của chú lấm tấm những đốm trắng tròn như những bông hoa rừng."
+    }
+  },
+  {
+    "id": "oai_oay",
+    "rimes": ["oai", "oay"],
+    "title": "oai - oay",
+    "bookPage": 111,
+    "illustratedWords": [
+      { "word": "khoai lang", "image": "🍠" },
+      { "word": "con hươu", "image": "🦌" },
+      { "word": "chong chóng xoay", "image": "🌀" },
+      { "word": "quả xoài", "image": "🥭" }
+    ],
+    "practiceWords": ["khoai lang", "quả xoài", "thoải mái", "xoay tròn", "loay hoay", "oai phong"],
+    "sentences": [
+      "Bà nướng củ khoai lang thơm lừng cho bé.",
+      "Bé thích thú ngắm chiếc chong chóng quay tít trong gió.",
+      "Chú gà trống đi lại dáng vẻ oai phong lẫm liệt."
+    ]
+  },
+  {
+    "id": "uoi_uoi",
+    "rimes": ["uôi", "ươi"],
+    "title": "uôi - ươi",
+    "bookPage": 112,
+    "illustratedWords": [
+      { "word": "nải chuối", "image": "🍌" },
+      { "word": "dòng suối", "image": "🏞️" },
+      { "word": "quả bưởi", "image": "🍈" },
+      { "word": "nụ cười", "image": "😊" }
+    ],
+    "practiceWords": ["nải chuối", "dòng suối", "quả bưởi", "tươi cười", "người bạn", "buổi trưa", "tưới hoa"],
+    "sentences": [
+      "Mẹ mua nải chuối chín thơm ngọt.",
+      "Dòng suối mát róc rách chảy dưới chân đồi.",
+      "Bé luôn tươi cười rạng rỡ chào hỏi mọi người."
+    ],
+    "passage": {
+      "title": "Buổi trưa hè",
+      "text": "Buổi trưa hè bên dòng suối trong veo, đàn cá nhỏ bơi lội tung tăng. Dưới bóng râm mát rượi, bé cùng chị ngồi ngắm những quả bưởi đung đưa trên cành."
+    }
+  },
+  {
+    "id": "uay_uya",
+    "rimes": ["uây", "uya"],
+    "title": "uây - uya",
+    "bookPage": 113,
+    "illustratedWords": [
+      { "word": "khuấy nước", "image": "🥄" },
+      { "word": "đêm khuya", "image": "🌙" },
+      { "word": "quây quần", "image": "👨‍👩‍👦" },
+      { "word": "khuya khoắt", "image": "⭐" }
+    ],
+    "practiceWords": ["khuấy đều", "đêm khuya", "quây quần", "khuya sớm", "múa may"],
+    "sentences": [
+      "Cả nhà quây quần bên ấm trà nóng.",
+      "Đêm khuya, vầng trăng rọi sáng khắp ngõ xóm.",
+      "Mẹ khuấy bát bột thơm phức cho em bé."
+    ]
+  },
+  {
+    "id": "ieu_yeu",
+    "rimes": ["iêu", "yêu"],
+    "title": "iêu - yêu",
+    "bookPage": 114,
+    "illustratedWords": [
+      { "word": "thả diều", "image": "🪁" },
+      { "word": "yêu quý", "image": "❤️" },
+      { "word": "cái niêu", "image": "🍲" },
+      { "word": "buổi chiều", "image": "🌅" }
+    ],
+    "practiceWords": ["thả diều", "buổi chiều", "yêu mến", "yêu quý", "dấu yêu", "cá kho niêu"],
+    "sentences": [
+      "Buổi chiều mát mẻ, bé ra triền đê thả diều.",
+      "Bé rất yêu quý ông bà, cha mẹ và thầy cô.",
+      "Cánh diều bay lượn trên nền trời xanh thẳm."
+    ],
+    "passage": {
+      "title": "Cánh diều tuổi thơ",
+      "text": "Mỗi buổi chiều hè, cánh diều no gió bay vút lên bầu trời cao rộng. Tiếng sáo diều vi vu ngân nga theo từng ngọn gió, mang theo bao ước mơ tươi đẹp của tuổi thơ."
+    }
+  },
+  {
+    "id": "oa_oe",
+    "rimes": ["oa", "oe"],
+    "title": "oa - oe",
+    "bookPage": 115,
+    "illustratedWords": [
+      { "word": "bông hoa", "image": "🌸" },
+      { "word": "họa sĩ", "image": "🎨" },
+      { "word": "loe hoe", "image": "✨" },
+      { "word": "chim hoa", "image": "🦜" }
+    ],
+    "practiceWords": ["bông hoa", "họa mi", "loe hoe", "khoa học", "chích chòe", "đỏ hoe"],
+    "sentences": [
+      "Bông hoa hồng nở rộ tỏa hương thơm ngát trong vườn.",
+      "Chim chích chòe hót véo von đón ngày mới.",
+      "Bé thích ngắm nhìn những bức tranh của các họa sĩ."
+    ]
+  },
+  {
+    "id": "ue_uo",
+    "rimes": ["uê", "uơ"],
+    "title": "uê - uơ",
+    "bookPage": 116,
+    "illustratedWords": [
+      { "word": "hoa huệ", "image": "🌺" },
+      { "word": "thuở xưa", "image": "📜" },
+      { "word": "xum xuê", "image": "🌳" },
+      { "word": "khua tay", "image": "👋" }
+    ],
+    "practiceWords": ["hoa huệ", "xum xuê", "thuở nhỏ", "khua khoắng", "chàng hoa"],
+    "sentences": [
+      "Bình hoa huệ trắng tinh khiết đặt trang nghiêm trên bàn.",
+      "Cây vải sau nhà cành lá xum xuê che mát rượi cả sân.",
+      "Bà kể chuyện thuở xưa cho bé nghe trước giờ ngủ."
+    ]
+  },
+  {
+    "id": "uy_uy",
+    "rimes": ["uy", "uya"],
+    "title": "uy - uya",
+    "bookPage": 117,
+    "illustratedWords": [
+      { "word": "tàu thủy", "image": "🚢" },
+      { "word": "lũy tre", "image": "🎋" },
+      { "word": "khuy áo", "image": "🔘" },
+      { "word": "đêm khuya", "image": "🌃" }
+    ],
+    "practiceWords": ["tàu thủy", "lũy tre", "khuy áo", "chú thợ may", "nguy nga", "chỉ huy"],
+    "sentences": [
+      "Con tàu thủy rẽ sóng ra khơi giữa đại dương mênh mông.",
+      "Lũy tre xanh rì rào theo từng làn gió mát.",
+      "Mẹ dạy bé tự cài khuy áo thật gọn gàng."
+    ]
+  },
+  {
+    "id": "uo_uo2",
+    "rimes": ["uô", "ươ"],
+    "title": "uô - ươ",
+    "bookPage": 118,
+    "illustratedWords": [
+      { "word": "ruộng lúa", "image": "🌾" },
+      { "word": "quả dưa", "image": "🍈" },
+      { "word": "bờ suối", "image": "🏞️" },
+      { "word": "con bướm", "image": "🦋" }
+    ],
+    "practiceWords": ["ruộng lúa", "con bướm", "mùa màng", "ngọn mương", "ươm mầm"],
+    "sentences": [
+      "Bác nông dân chăm sóc ruộng lúa chín vàng óng.",
+      "Đàn bướm nhỏ rập rờn bay lượn bên luống hoa.",
+      "Mẹ ươm từng mầm cây xanh trong vườn nhà."
+    ]
+  },
+  {
+    "id": "oeo",
+    "rimes": ["oeo", "oay"],
+    "title": "oeo - oay",
+    "bookPage": 119,
+    "illustratedWords": [
+      { "word": "ngoằn ngoèo", "image": "〰️" },
+      { "word": "xoay tròn", "image": "🔄" },
+      { "word": "đường đèo", "image": "⛰️" },
+      { "word": "loay hoay", "image": "⚙️" }
+    ],
+    "practiceWords": ["ngoằn ngoèo", "xoay tròn", "loay hoay", "quanh co", "gập ghềnh"],
+    "sentences": [
+      "Con đường đèo uốn lượn ngoằn ngoèo qua sườn núi.",
+      "Bé loay hoay ghép từng mảnh hình vào bức tranh.",
+      "Chiếc chong chóng xoay tròn trong gió sớm."
+    ]
+  },
+  {
+    "id": "on_tieu_hoc",
+    "rimes": ["ia", "ua", "ưa"],
+    "title": "ia - ua - ưa",
+    "bookPage": 120,
+    "illustratedWords": [
+      { "word": "cà chua", "image": "🍅" },
+      { "word": "cá ngựa", "image": "🐎" },
+      { "word": "đĩa hoa", "image": "🍽️" },
+      { "word": "quả dừa", "image": "🥥" }
+    ],
+    "practiceWords": ["lá mía", "cà chua", "quả dừa", "chia quà", "đua thuyền", "mưa rào"],
+    "sentences": [
+      "Mẹ chia quà cho cả nhà.",
+      "Cây dừa trước ngõ nghiêng bóng mát rượi.",
+      "Bé cùng bạn nô đùa vui vẻ bên sân đình."
+    ]
+  },
+  {
+    "id": "on_nguyen_am",
+    "rimes": ["ai", "ay", "ây"],
+    "title": "ai - ay - ây",
+    "bookPage": 121,
+    "illustratedWords": [
+      { "word": "hoa mai", "image": "🌼" },
+      { "word": "máy bay", "image": "✈️" },
+      { "word": "cây cối", "image": "🌳" },
+      { "word": "bàn tay", "image": "✋" }
+    ],
+    "practiceWords": ["hoa mai", "máy bay", "thầy cô", "bàn tay", "ngày mai", "xây nhà"],
+    "sentences": [
+      "Bàn tay bé nhỏ nắn nót viết từng nét chữ.",
+      "Hoa mai vàng rực rỡ đón mùa xuân sang.",
+      "Ngày mai bé lại được đến trường cùng thầy cô và bè bạn."
+    ]
+  },
+  {
+    "id": "eng_ieng",
+    "rimes": ["eng", "iêng"],
+    "title": "eng - iêng",
+    "bookPage": 60,
+    "illustratedWords": [
+      { "word": "cái kẻng", "image": "🔔" },
+      { "word": "sầu riêng", "image": "🍈" },
+      { "word": "xà beng", "image": "⛏️" },
+      { "word": "tiếng cồng", "image": "🥁" }
+    ],
+    "practiceWords": ["cái kẻng", "sầu riêng", "tiếng chiêng", "xà beng", "láng giềng", "êng ễnh"],
+    "sentences": [
+      "Tiếng kẻng báo hiệu giờ ra chơi rộn rã sân trường.",
+      "Quả sầu riêng chín thơm nức mũi cả gian phòng.",
+      "Tình làng nghĩa xóm láng giềng luôn thắm thiết bền lâu."
+    ]
+  },
+  {
+    "id": "ong_ong",
+    "rimes": ["ong", "ông"],
+    "title": "ong - ông",
+    "bookPage": 61,
+    "illustratedWords": [
+      { "word": "con ong", "image": "🐝" },
+      { "word": "bông hồng", "image": "🌹" },
+      { "word": "cái võng", "image": "🪢" },
+      { "word": "dòng sông", "image": "🌊" }
+    ],
+    "practiceWords": ["con ong", "bông hoa", "dòng sông", "chiếc võng", "trồng cây", "cầu vồng"],
+    "sentences": [
+      "Chú ong chăm chỉ bay đi tìm hoa làm mật ngọt.",
+      "Dòng sông hiền hòa uốn lượn quanh cánh đồng xanh ngát.",
+      "Bé nằm trên chiếc võng nghe bà ru câu hò êm ái."
+    ],
+    "passage": {
+      "title": "Chú ong chăm chỉ",
+      "text": "Mỗi sớm mai, khi ánh nắng rọi sáng vườn hoa, từng đàn ong chăm chỉ đã bay rộn rã kiếm mật. Ong bay từ bông hoa này sang bông hoa khác, đem mật ngọt dâng tặng cho đời."
+    }
+  },
+  {
+    "id": "ung_ung",
+    "rimes": ["ung", "ưng"],
+    "title": "ung - ưng",
+    "bookPage": 62,
+    "illustratedWords": [
+      { "word": "khủng long", "image": "🦖" },
+      { "word": "cây sung", "image": "🌳" },
+      { "word": "chim ưng", "image": "🦅" },
+      { "word": "bừng sáng", "image": "☀️" }
+    ],
+    "practiceWords": ["khủng long", "cây sung", "chim ưng", "tưng bừng", "vui mừng", "rừng cây"],
+    "sentences": [
+      "Khí thế ngày hội tưng bừng khắp bản làng quê hương.",
+      "Chim ưng dũng mãnh sải cánh bay lượn trên bầu trời xanh.",
+      "Cả nhà vui mừng chào đón tin vui."
+    ]
+  },
+  {
+    "id": "oang_oang",
+    "rimes": ["oang", "oăng"],
+    "title": "oang - oăng",
+    "bookPage": 64,
+    "illustratedWords": [
+      { "word": "khoang tàu", "image": "🚢" },
+      { "word": "vỡ toang", "image": "💥" },
+      { "word": "dài ngoẵng", "image": "📏" },
+      { "word": "khoác áo", "image": "🧥" }
+    ],
+    "practiceWords": ["khoang thuyền", "oang oang", "dài ngoẵng", "khoác tay", "sáng loáng"],
+    "sentences": [
+      "Bé ngồi trong khoang tàu ngắm nhìn sóng biển bao la.",
+      "Tiếng cười nói rộn rã oang oang khắp sân nhà.",
+      "Bàn học của bé được lau chùi sáng loáng, ngăn nắp."
+    ]
+  },
+  {
+    "id": "uong_uong",
+    "rimes": ["uông", "ương"],
+    "title": "uông - ương",
+    "bookPage": 65,
+    "illustratedWords": [
+      { "word": "chuông gió", "image": "🎐" },
+      { "word": "con mương", "image": "🏞️" },
+      { "word": "quả chuối", "image": "🍌" },
+      { "word": "bức tượng", "image": "🗿" }
+    ],
+    "practiceWords": ["tiếng chuông", "con đường", "bức tường", "dòng mương", "quê hương", "yêu thương"],
+    "sentences": [
+      "Tiếng chuông chùa ngân nga trầm bổng lúc hoàng hôn.",
+      "Con đường làng quê rợp bóng mát cây xanh.",
+      "Bé luôn dành trọn tình yêu thương cho quê hương đất nước."
+    ],
+    "passage": {
+      "title": "Quê hương tươi đẹp",
+      "text": "Quê hương em có dòng sông xanh biếc, có những con đường rợp bóng tre ngà. Chiều chiều, tiếng chuông gió rung rinh ngân vang trong gió làm lòng người thêm xao xuyến."
+    }
+  },
+  {
+    "id": "ieng_yeng",
+    "rimes": ["iêng", "yểng"],
+    "title": "iêng - yểng",
+    "bookPage": 66,
+    "illustratedWords": [
+      { "word": "chim yểng", "image": "🦜" },
+      { "word": "tiếng chiêng", "image": "🥁" },
+      { "word": "sầu riêng", "image": "🍈" },
+      { "word": "giếng nước", "image": "🪣" }
+    ],
+    "practiceWords": ["chim yểng", "tiếng chiêng", "giếng làng", "riêng tư", "nghiêng nghiêng"],
+    "sentences": [
+      "Chú chim yểng biết bắt chước tiếng người thật tài tình.",
+      "Bên bờ giếng làng, các bà các chị quây quần múc nước mát.",
+      "Cành hoa nghiêng nghiêng soi bóng bên bờ hồ trong vắt."
+    ]
+  },
+  {
+    "id": "et_et_it",
+    "rimes": ["et", "êt", "it"],
+    "title": "et - êt - it",
+    "bookPage": 46,
+    "illustratedWords": [
+      { "word": "con vẹt", "image": "🦜" },
+      { "word": "bánh tét", "image": "🫔" },
+      { "word": "trái mít", "image": "🍈" },
+      { "word": "cái dệt", "image": "🧵" }
+    ],
+    "practiceWords": ["con vẹt", "nghề dệt", "trái mít", "bánh tét", "bền chặt", "vui tết"],
+    "sentences": [
+      "Chú vẹt có bộ lông rực rỡ biết nhại giọng rất vui tai.",
+      "Mẹ gọt đĩa mít mật chín thơm lừng cho bé.",
+      "Cả nhà quây quần gói bánh chưng, bánh tét đón Tết."
+    ]
+  },
+  {
+    "id": "ot_ot_ot",
+    "rimes": ["ot", "ôt", "ơt"],
+    "title": "ot - ôt - ơt",
+    "bookPage": 47,
+    "illustratedWords": [
+      { "word": "quả nhót", "image": "🍒" },
+      { "word": "cột cờ", "image": "🚩" },
+      { "word": "trái ớt", "image": "🌶️" },
+      { "word": "cái chốt", "image": "🔒" }
+    ],
+    "practiceWords": ["quả nhót", "cột cờ", "quả ớt", "chốt cửa", "thơm ngọt", "tốt bụng"],
+    "sentences": [
+      "Quả nhót chín đỏ mọng chua ngọt chấm muối ớt.",
+      "Lá cờ đỏ sao vàng tung bay trên đỉnh cột cờ cao vút.",
+      "Bé ngoan ngoãn, tốt bụng luôn giúp đỡ bạn bè."
+    ]
+  },
+  {
+    "id": "ut_ut",
+    "rimes": ["ut", "ưt"],
+    "title": "ut - ưt",
+    "bookPage": 48,
+    "illustratedWords": [
+      { "word": "cây bút", "image": "✏️" },
+      { "word": "súp lơ", "image": "🥦" },
+      { "word": "mứt tết", "image": "🍬" },
+      { "word": "hút nước", "image": "🥤" }
+    ],
+    "practiceWords": ["cây bút", "hút bụi", "mứt dừa", "mứt gừng", "sút bóng", "dứt khoát"],
+    "sentences": [
+      "Bé cầm cây bút mực nắn nót viết từng dòng chữ ngay ngắn.",
+      "Bà làm khay mứt dừa ngọt lịm thơm ngon cho ngày Tết.",
+      "Bé sút bóng thật mạnh vào khung thành sân cỏ."
+    ]
+  },
+  {
+    "id": "oc_oc_uc",
+    "rimes": ["oc", "ôc", "uc"],
+    "title": "oc - ôc - uc",
+    "bookPage": 53,
+    "illustratedWords": [
+      { "word": "con cóc", "image": "🐸" },
+      { "word": "con ốc", "image": "🐚" },
+      { "word": "bụi trúc", "image": "🎋" },
+      { "word": "học bài", "image": "📖" }
+    ],
+    "practiceWords": ["con cóc", "con ốc", "học tập", "bụi trúc", "gốc cây", "lộc non"],
+    "sentences": [
+      "Bé chăm chỉ ngồi vào bàn học bài mỗi tối.",
+      "Gốc cây cổ thụ tỏa bóng mát che chở cho cả sân trường.",
+      "Bụi trúc xanh ngát reo vui trong gió sớm."
+    ]
+  },
+  {
+    "id": "oc_uc2",
+    "rimes": ["ơc", "ưc"],
+    "title": "ơc - ưc",
+    "bookPage": 54,
+    "illustratedWords": [
+      { "word": "mực nang", "image": "🦑" },
+      { "word": "lọ mực", "image": "🖋️" },
+      { "word": "thước kẻ", "image": "📏" },
+      { "word": "ngực áo", "image": "👕" }
+    ],
+    "practiceWords": ["mực nang", "lọ mực", "sức khỏe", "ngực áo", "thực phẩm", "mức độ"],
+    "sentences": [
+      "Bé giữ gìn lọ mực cẩn thận không để vương ra vở.",
+      "Tập thể dục mỗi ngày giúp bé có sức khỏe dẻo dai.",
+      "Mẹ nấu món canh mực nang thanh mát, bổ dưỡng."
+    ]
+  },
+  {
+    "id": "oac_oac",
+    "rimes": ["oac", "oăc"],
+    "title": "oac - oăc",
+    "bookPage": 55,
+    "illustratedWords": [
+      { "word": "áo khoác", "image": "🧥" },
+      { "word": "ngoặc tay", "image": "🤙" },
+      { "word": "dấu ngoặc", "image": "괄" },
+      { "word": "xoạc chân", "image": "🤸" }
+    ],
+    "practiceWords": ["áo khoác", "dấu ngoặc", "ngoắc tay", "xoạc chân", "khoác ba lô"],
+    "sentences": [
+      "Trời trở gió lạnh, mẹ khoác chiếc áo ấm cho bé.",
+      "Hai bạn ngoắc tay hứa cùng nhau chăm ngoan học giỏi.",
+      "Bé khoác chiếc ba lô xinh xắn vui vẻ bước tới trường."
+    ]
+  },
+  {
+    "id": "ap_ap_ap",
+    "rimes": ["ap", "ăp", "âp"],
+    "title": "ap - ăp - âp",
+    "bookPage": 68,
+    "illustratedWords": [
+      { "word": "xe đạp", "image": "🚲" },
+      { "word": "cái cặp", "image": "🎒" },
+      { "word": "bậc cấp", "image": "🪜" },
+      { "word": "tháp rùa", "image": "🏛️" }
+    ],
+    "practiceWords": ["xe đạp", "chiếc cặp", "ấm áp", "ngăn nắp", "tháp rùa", "tập tành"],
+    "sentences": [
+      "Bố dạy bé tập đi xe đạp ở công viên.",
+      "Chiếc cặp sách của bé luôn được sắp xếp ngăn nắp.",
+      "Ánh nắng ban mai tỏa hơi ấm áp xuống khắp đất trời."
+    ]
+  },
+  {
+    "id": "ep_ep_ip",
+    "rimes": ["ep", "êp", "ip"],
+    "title": "ep - êp - ip",
+    "bookPage": 70,
+    "illustratedWords": [
+      { "word": "đôi dép", "image": "🩴" },
+      { "word": "bếp lửa", "image": "🔥" },
+      { "word": "kịp giờ", "image": "⏰" },
+      { "word": "xôi nếp", "image": "🍚" }
+    ],
+    "practiceWords": ["đôi dép", "bếp lửa", "xôi nếp", "kịp giờ", "gọn gàng", "bắt kịp"],
+    "sentences": [
+      "Bé xếp đôi dép ngay ngắn trước bậc thềm nhà.",
+      "Mùi xôi nếp thơm nồng bốc lên từ gian bếp ấm cúng.",
+      "Bé dậy sớm ăn sáng để kịp giờ tới trường."
+    ]
+  },
+  {
+    "id": "op_op_op",
+    "rimes": ["op", "ôp", "ơp"],
+    "title": "op - ôp - ơp",
+    "bookPage": 71,
+    "illustratedWords": [
+      { "word": "hộp quà", "image": "🎁" },
+      { "word": "chớp mắt", "image": "👁️" },
+      { "word": "lớp học", "image": "🏫" },
+      { "word": "tổ ong", "image": "🪺" }
+    ],
+    "practiceWords": ["hộp quà", "lớp học", "chớp mắt", "hợp tác", "lợp nhà", "tốp ca"],
+    "sentences": [
+      "Bé nhận được hộp quà sinh nhật thật xinh xắn.",
+      "Lớp học của bé khang trang, sạch đẹp và rộn rã tiếng cười.",
+      "Đội thiếu nhi cùng nhau hát vang bài ca tốp ca mừng ngày hội."
+    ]
+  },
+  {
+    "id": "up",
+    "rimes": ["up"],
+    "title": "up",
+    "bookPage": 72,
+    "illustratedWords": [
+      { "word": "búp sen", "image": "🪷" },
+      { "word": "úp mặt", "image": "🙈" },
+      { "word": "chụp ảnh", "image": "📷" },
+      { "word": "búp bê", "image": "🪆" }
+    ],
+    "practiceWords": ["búp sen", "úp bát", "chụp ảnh", "búp măng", "giúp đỡ"],
+    "sentences": [
+      "Những búp sen hồng chúm chím vươn mình đón nắng sớm.",
+      "Bố chụp cho cả nhà một bức ảnh kỷ niệm thật đẹp.",
+      "Bé ngoan ngoãn luôn biết giúp đỡ bạn bè cùng tiến bộ."
+    ]
+  },
+  {
+    "id": "ach_ech_ich",
+    "rimes": ["ach", "êch", "ich"],
+    "title": "ach - êch - ich",
+    "bookPage": 74,
+    "illustratedWords": [
+      { "word": "cuốn sách", "image": "📕" },
+      { "word": "con ếch", "image": "🐸" },
+      { "word": "chim chích", "image": "🐦" },
+      { "word": "bức vách", "image": "🧱" }
+    ],
+    "practiceWords": ["cuốn sách", "chú ếch", "chim chích", "sạch sẽ", "du lịch", "túi xách"],
+    "sentences": [
+      "Bé nâng niu từng trang sách mới thơm mùi mực in.",
+      "Chú ếch xanh ngồi trên lá sen cất tiếng ộp oạp.",
+      "Giữ gìn vệ sinh sạch sẽ giúp thân thể luôn khỏe mạnh."
+    ]
+  },
+  {
+    "id": "oan_oan_oan",
+    "rimes": ["oan", "oăn"],
+    "title": "oan - oăn",
+    "bookPage": 80,
+    "illustratedWords": [
+      { "word": "bé ngoan", "image": "👧" },
+      { "word": "tóc xoăn", "image": "💇" },
+      { "word": "đoàn kết", "image": "🤝" },
+      { "word": "hoan hô", "image": "👏" }
+    ],
+    "practiceWords": ["bé ngoan", "tóc xoăn", "hoan hô", "đoàn tàu", "thoăn thoắt", "ngoan ngoãn"],
+    "sentences": [
+      "Bé luôn vâng lời cha mẹ, xứng đáng là cháu ngoan Bác Hồ.",
+      "Bé có mái tóc xoăn bồng bềnh trông rất đáng yêu.",
+      "Cả lớp hoan hô nhiệt liệt chúc mừng các bạn đạt điểm mười."
+    ]
+  },
+  {
+    "id": "oat_oat",
+    "rimes": ["oat", "oăt"],
+    "title": "oat - oăt",
+    "bookPage": 82,
+    "illustratedWords": [
+      { "word": "thoăn thoắt", "image": "⚡" },
+      { "word": "hoạt hình", "image": "📺" },
+      { "word": "nhọn hoắt", "image": "📍" },
+      { "word": "khoác áo", "image": "🧥" }
+    ],
+    "practiceWords": ["hoạt hình", "thoăn thoắt", "nhọn hoắt", "sinh hoạt", "lưu loát"],
+    "sentences": [
+      "Đôi tay thoăn thoắt của bà đan từng mũi len êm ái.",
+      "Bé chăm chú theo dõi bộ phim hoạt hình vui nhộn.",
+      "Bé luyện tập đọc bài thật to, rõ ràng và lưu loát."
+    ]
+  },
+  {
+    "id": "uyen_uyet",
+    "rimes": ["uyên", "uyêt"],
+    "title": "uyên - uyết",
+    "bookPage": 86,
+    "illustratedWords": [
+      { "word": "chim khuyên", "image": "🐦" },
+      { "word": "ánh trăng khuyết", "image": "🌙" },
+      { "word": "câu chuyện", "image": "📚" },
+      { "word": "tuyết trắng", "image": "❄️" }
+    ],
+    "practiceWords": ["chim khuyên", "vành khuyên", "trăng khuyết", "kể chuyện", "tuyết trắng", "tập duyệt"],
+    "sentences": [
+      "Chú chim vành khuyên líu lo ca hát đón ánh mặt trời.",
+      "Đêm rằm chưa tới, vầng trăng khuyết treo lơ lửng trên bầu trời.",
+      "Cô giáo kể câu chuyện cổ tích thật ý nghĩa cho cả lớp nghe."
+    ],
+    "passage": {
+      "title": "Chú chim vành khuyên",
+      "text": "Trên cành cây cao, chú chim vành khuyên nhỏ nhắn nhảy nhót chuyền cành. Tiếng hót trong trẻo của chim như lời chào bình minh tươi sáng, đánh thức vạn vật sau giấc ngủ đêm dài."
+    }
   }
 ];
 
-// CẤU TRÚC PHÂN CHIA PHẦN HỌC THEO YÊU CẦU:
+// CẤU TRÚC 5 PHẦN HỌC CHUẨN THỨ TỰ SÁCH GỐC (Trang 5-30, Trang 101-123, Trang 33-98)
 // Mỗi Phần gồm đúng 2 HÀNG (Hàng trên & Hàng dưới), mỗi hàng đúng 8 ĐƠN VỊ = 16 đơn vị / Phần
 export interface LessonUnitItem {
   id: string; // e.g. 'b', 'c', 'ia', 'ay_ay'
   type: 'consonant' | 'rime';
-  label: string; // Tên hiển thị to (ví dụ: b, c, ia, ay - ây)
-  subLabel: string; // Tên phụ phát âm/trang sách (ví dụ: "bờ", "Trang 120")
+  label: string; // Tên hiển thị to (ví dụ: b, c, ia, ay - ây, an · ăn · ân)
+  subLabel: string; // Tên phụ phát âm/gợi nhớ (ví dụ: "bờ", "Gà gáy", "Bãi cát")
   pageNumber?: number;
-  highlightTag?: string; // Ví dụ: "Có truyện", "Vần n", "Vần m"
 }
 
 export interface LessonPart {
-  id: string; // 'part1', 'part2', 'part3'
-  title: string; // 'Phần 1', 'Phần 2', 'Phần 3'
+  id: string; // 'part1', 'part2', 'part3', 'part4', 'part5'
+  title: string; // 'Phần 1', 'Phần 2', ...
   name: string; // Tên đầy đủ
+  stageLabel: string; // 'Giai đoạn 1 (Trang 5-30)', 'Giai đoạn 2 (Trang 101-123)', 'Giai đoạn 3 (Trang 33-98)'
   description: string;
   badgeColor: string;
   row1: LessonUnitItem[]; // Đúng 8 đơn vị
@@ -2380,88 +2980,152 @@ export const LESSON_PARTS: LessonPart[] = [
     id: 'part1',
     title: 'Phần 1',
     name: 'Phần 1: 16 Phụ Âm Đầu Tiên',
-    description: 'Tập đánh vần và luyện đọc 16 phụ âm đầu (Trang 5 - 20 sách Hà Nội)',
+    stageLabel: 'Giai đoạn 1 (Trang 5 - 20)',
+    description: '16 phụ âm đơn cơ bản ghép với 11 nguyên âm và 5 dấu thanh (Trang 5 - 20 sách gốc)',
     badgeColor: 'sky',
-    // Hàng Trên: Đúng 8 đơn vị (1 - 8)
+    // Hàng Trên: Đúng 8 đơn vị (Trang 5 - 12)
     row1: [
       { id: 'b', type: 'consonant', label: 'b', subLabel: 'bờ', pageNumber: 5 },
       { id: 'c', type: 'consonant', label: 'c', subLabel: 'cờ', pageNumber: 6 },
       { id: 'd', type: 'consonant', label: 'd', subLabel: 'dờ', pageNumber: 7 },
       { id: 'đ', type: 'consonant', label: 'đ', subLabel: 'đờ', pageNumber: 8 },
       { id: 'g', type: 'consonant', label: 'g', subLabel: 'gờ đơn', pageNumber: 9 },
-      { id: 'gh', type: 'consonant', label: 'gh', subLabel: 'gờ kép', pageNumber: 10 },
-      { id: 'gi', type: 'consonant', label: 'gi', subLabel: 'gi', pageNumber: 11 },
-      { id: 'h', type: 'consonant', label: 'h', subLabel: 'hờ', pageNumber: 12 },
+      { id: 'h', type: 'consonant', label: 'h', subLabel: 'hờ', pageNumber: 10 },
+      { id: 'k', type: 'consonant', label: 'k', subLabel: 'ca', pageNumber: 11 },
+      { id: 'l', type: 'consonant', label: 'l', subLabel: 'lờ', pageNumber: 12 },
     ],
-    // Hàng Dưới: Đúng 8 đơn vị (9 - 16)
+    // Hàng Dưới: Đúng 8 đơn vị (Trang 13 - 20)
     row2: [
-      { id: 'k', type: 'consonant', label: 'k', subLabel: 'ca', pageNumber: 13 },
-      { id: 'kh', type: 'consonant', label: 'kh', subLabel: 'khờ', pageNumber: 14 },
-      { id: 'l', type: 'consonant', label: 'l', subLabel: 'lờ', pageNumber: 15 },
-      { id: 'm', type: 'consonant', label: 'm', subLabel: 'mờ', pageNumber: 16 },
-      { id: 'n', type: 'consonant', label: 'n', subLabel: 'nờ', pageNumber: 17 },
-      { id: 'ng', type: 'consonant', label: 'ng', subLabel: 'ngờ đơn', pageNumber: 18 },
-      { id: 'ngh', type: 'consonant', label: 'ngh', subLabel: 'ngờ kép', pageNumber: 19 },
-      { id: 'nh', type: 'consonant', label: 'nh', subLabel: 'nhờ', pageNumber: 20 },
+      { id: 'm', type: 'consonant', label: 'm', subLabel: 'mờ', pageNumber: 13 },
+      { id: 'n', type: 'consonant', label: 'n', subLabel: 'nờ', pageNumber: 14 },
+      { id: 'r', type: 'consonant', label: 'r', subLabel: 'rờ', pageNumber: 15 },
+      { id: 's', type: 'consonant', label: 's', subLabel: 'sờ', pageNumber: 16 },
+      { id: 't', type: 'consonant', label: 't', subLabel: 'tờ', pageNumber: 17 },
+      { id: 'v', type: 'consonant', label: 'v', subLabel: 'vờ', pageNumber: 18 },
+      { id: 'x', type: 'consonant', label: 'x', subLabel: 'xờ', pageNumber: 19 },
+      { id: 'ch', type: 'consonant', label: 'ch', subLabel: 'chờ', pageNumber: 20 },
     ],
   },
   {
     id: 'part2',
     title: 'Phần 2',
-    name: 'Phần 2: 11 Phụ Âm Tiếp Theo & 5 Vần Đôi Cơ Bản',
-    description: '11 phụ âm tiếp theo (Trang 21-31) và 5 nhóm vần đôi cơ bản (Trang 115-119)',
+    name: 'Phần 2: 11 Phụ Âm Ghép & 5 Vần Đôi Mở Đầu',
+    stageLabel: 'Giai đoạn 1 & 2 (Trang 21-30, 47 & 101-105)',
+    description: '11 phụ âm ghép (Trang 21-30, 47) và 5 vần đôi mở đầu tiên (Trang 101-105 / 115-119)',
     badgeColor: 'emerald',
-    // Hàng Trên: Đúng 8 đơn vị (1 - 8)
+    // Hàng Trên: Đúng 8 đơn vị (8 Phụ âm ghép, Trang 21 - 28)
     row1: [
-      { id: 'p', type: 'consonant', label: 'p', subLabel: 'pờ', pageNumber: 21 },
-      { id: 'ph', type: 'consonant', label: 'ph', subLabel: 'phờ', pageNumber: 22 },
-      { id: 'qu', type: 'consonant', label: 'qu', subLabel: 'quờ', pageNumber: 23 },
-      { id: 'r', type: 'consonant', label: 'r', subLabel: 'rờ', pageNumber: 24 },
-      { id: 's', type: 'consonant', label: 's', subLabel: 'sờ', pageNumber: 25 },
-      { id: 't', type: 'consonant', label: 't', subLabel: 'tờ', pageNumber: 26 },
-      { id: 'th', type: 'consonant', label: 'th', subLabel: 'thờ', pageNumber: 27 },
-      { id: 'tr', type: 'consonant', label: 'tr', subLabel: 'trờ', pageNumber: 28 },
+      { id: 'gh', type: 'consonant', label: 'gh', subLabel: 'gờ kép', pageNumber: 21 },
+      { id: 'gi', type: 'consonant', label: 'gi', subLabel: 'gi', pageNumber: 22 },
+      { id: 'ng', type: 'consonant', label: 'ng', subLabel: 'ngờ đơn', pageNumber: 23 },
+      { id: 'nh', type: 'consonant', label: 'nh', subLabel: 'nhờ', pageNumber: 24 },
+      { id: 'kh', type: 'consonant', label: 'kh', subLabel: 'khờ', pageNumber: 25 },
+      { id: 'ph', type: 'consonant', label: 'ph', subLabel: 'phờ', pageNumber: 26 },
+      { id: 'qu', type: 'consonant', label: 'qu', subLabel: 'quờ', pageNumber: 27 },
+      { id: 'th', type: 'consonant', label: 'th', subLabel: 'thờ', pageNumber: 28 },
     ],
-    // Hàng Dưới: Đúng 8 đơn vị (9 - 16)
+    // Hàng Dưới: Đúng 8 đơn vị (3 Phụ âm ghép & 5 Vần đôi mở đầu tiên)
     row2: [
-      { id: 'v', type: 'consonant', label: 'v', subLabel: 'vờ', pageNumber: 29 },
-      { id: 'x', type: 'consonant', label: 'x', subLabel: 'xờ', pageNumber: 30 },
-      { id: 'ch', type: 'consonant', label: 'ch', subLabel: 'chờ', pageNumber: 31 },
-      { id: 'ia', type: 'rime', label: 'ia', subLabel: 'ia' },
-      { id: 'ua_ua', type: 'rime', label: 'ua - ưa', subLabel: 'ua, ưa' },
-      { id: 'oi_ai', type: 'rime', label: 'oi - ai', subLabel: 'oi, ai' },
-      { id: 'oi_oi2', type: 'rime', label: 'ôi - ơi', subLabel: 'ôi, ơi' },
-      { id: 'ui_ui', type: 'rime', label: 'ui - ưi', subLabel: 'ui, ưi' },
+      { id: 'tr', type: 'consonant', label: 'tr', subLabel: 'trờ', pageNumber: 29 },
+      { id: 'ngh', type: 'consonant', label: 'ngh', subLabel: 'ngờ kép', pageNumber: 30 },
+      { id: 'p', type: 'consonant', label: 'p', subLabel: 'pờ', pageNumber: 47 },
+      { id: 'ia', type: 'rime', label: 'ia', subLabel: 'ia', pageNumber: 101 },
+      { id: 'ua_ua', type: 'rime', label: 'ua - ưa', subLabel: 'ua, ưa', pageNumber: 102 },
+      { id: 'oi_ai', type: 'rime', label: 'oi - ai', subLabel: 'oi, ai', pageNumber: 103 },
+      { id: 'oi_oi2', type: 'rime', label: 'ôi - ơi', subLabel: 'ôi, ơi', pageNumber: 104 },
+      { id: 'ui_ui', type: 'rime', label: 'ui - ưi', subLabel: 'ui, ưi', pageNumber: 105 },
     ],
   },
   {
     id: 'part3',
     title: 'Phần 3',
-    name: 'Phần 3',
-    description: 'Truyện kinh điển & các bài ghép âm vần',
+    name: 'Phần 3: Vần Mở Đôi & Truyện Kinh Điển Gốc',
+    stageLabel: 'Giai đoạn 2 (Trang 106 - 123)',
+    description: 'Tích hợp vần đôi và truyện kinh điển gốc: Gà Gáy, Mèo Dạy Hổ, Xào Rau, Chạy Thi...',
     badgeColor: 'amber',
-    // Hàng Trên: Đúng 8 đơn vị (1 - 8)
+    // Hàng Trên: Đúng 8 đơn vị (Trang 106 - 113)
     row1: [
-      { id: 'ay_ay', type: 'rime', label: 'ay - ây', subLabel: 'ay, ây' },
-      { id: 'eo_ao', type: 'rime', label: 'eo - ao', subLabel: 'eo, ao' },
-      { id: 'au_au', type: 'rime', label: 'au - âu', subLabel: 'au, âu' },
-      { id: 'iu_eu', type: 'rime', label: 'iu - êu', subLabel: 'iu, êu' },
-      { id: 'an_an_an', type: 'rime', label: 'an · ăn · ân', subLabel: 'an, ăn, ân' },
-      { id: 'en_en_in', type: 'rime', label: 'en · ên · in', subLabel: 'en, ên, in' },
-      { id: 'on_on_on', type: 'rime', label: 'on · ôn · ơn', subLabel: 'on, ôn, ơn' },
-      { id: 'un', type: 'rime', label: 'un', subLabel: 'un' },
+      { id: 'ay_ay', type: 'rime', label: 'ay - ây', subLabel: 'Gà gáy', pageNumber: 106 },
+      { id: 'eo_ao', type: 'rime', label: 'eo - ao', subLabel: 'Mèo dạy hổ', pageNumber: 107 },
+      { id: 'au_au', type: 'rime', label: 'au - âu', subLabel: 'Xào rau', pageNumber: 108 },
+      { id: 'iu_eu', type: 'rime', label: 'iu - êu', subLabel: 'Chạy thi', pageNumber: 109 },
+      { id: 'uu_uou', type: 'rime', label: 'ưu - ươu', subLabel: 'Hươu sao', pageNumber: 110 },
+      { id: 'oai_oay', type: 'rime', label: 'oai - oay', subLabel: 'Khoai lang', pageNumber: 111 },
+      { id: 'uoi_uoi', type: 'rime', label: 'uôi - ươi', subLabel: 'Nải chuối', pageNumber: 112 },
+      { id: 'uay_uya', type: 'rime', label: 'uây - uya', subLabel: 'Đêm khuya', pageNumber: 113 },
     ],
-    // Hàng Dưới: Đúng 8 đơn vị (9 - 16)
+    // Hàng Dưới: Đúng 8 đơn vị (Trang 114 - 121)
     row2: [
-      { id: 'am_am_am', type: 'rime', label: 'am · ăm · âm', subLabel: 'am, ăm, âm' },
-      { id: 'em_em_im', type: 'rime', label: 'em · êm · im', subLabel: 'em, êm, im' },
-      { id: 'om_om_om', type: 'rime', label: 'om · ôm · ơm', subLabel: 'om, ôm, ơm' },
-      { id: 'um', type: 'rime', label: 'um', subLabel: 'um' },
-      { id: 'at_at_at', type: 'rime', label: 'at · ăt · ât', subLabel: 'at, ăt, ât' },
-      { id: 'ac_ac_ac', type: 'rime', label: 'ac · ăc · âc', subLabel: 'ac, ăc, âc' },
-      { id: 'ang_ang_ang', type: 'rime', label: 'ang · ăng · âng', subLabel: 'ang, ăng, âng' },
-      { id: 'anh_enh_inh', type: 'rime', label: 'anh · ênh · inh', subLabel: 'anh, ênh, inh' },
+      { id: 'ieu_yeu', type: 'rime', label: 'iêu - yêu', subLabel: 'Thả diều', pageNumber: 114 },
+      { id: 'oa_oe', type: 'rime', label: 'oa - oe', subLabel: 'Bông hoa', pageNumber: 115 },
+      { id: 'ue_uo', type: 'rime', label: 'uê - uơ', subLabel: 'Hoa huệ', pageNumber: 116 },
+      { id: 'uy_uy', type: 'rime', label: 'uy - uya', subLabel: 'Tàu thủy', pageNumber: 117 },
+      { id: 'uo_uo2', type: 'rime', label: 'uô - ươ', subLabel: 'Ruộng lúa', pageNumber: 118 },
+      { id: 'oeo', type: 'rime', label: 'oeo - oay', subLabel: 'Ngoằn ngoèo', pageNumber: 119 },
+      { id: 'on_tieu_hoc', type: 'rime', label: 'ia · ua · ưa', subLabel: 'Ôn tập 1', pageNumber: 120 },
+      { id: 'on_nguyen_am', type: 'rime', label: 'ai · ay · ây', subLabel: 'Ôn tập 2', pageNumber: 121 },
+    ],
+  },
+  {
+    id: 'part4',
+    title: 'Phần 4',
+    name: 'Phần 4: Vần Âm Cuối -n, -m, -ng, -nh',
+    stageLabel: 'Giai đoạn 3 (Trang 33 - 66)',
+    description: 'Các vần khép âm cuối n, m, ng, nh rèn đọc trơn mượt mà (Trang 33 - 66 sách gốc)',
+    badgeColor: 'violet',
+    // Hàng Trên: Đúng 8 đơn vị (Vần kết thúc bằng n và m)
+    row1: [
+      { id: 'an_an_an', type: 'rime', label: 'an · ăn · ân', subLabel: 'an, ăn, ân', pageNumber: 34 },
+      { id: 'en_en_in', type: 'rime', label: 'en · ên · in', subLabel: 'en, ên, in', pageNumber: 35 },
+      { id: 'on_on_on', type: 'rime', label: 'on · ôn · ơn', subLabel: 'on, ôn, ơn', pageNumber: 36 },
+      { id: 'un', type: 'rime', label: 'un', subLabel: 'con giun', pageNumber: 37 },
+      { id: 'am_am_am', type: 'rime', label: 'am · ăm · âm', subLabel: 'am, ăm, âm', pageNumber: 39 },
+      { id: 'em_em_im', type: 'rime', label: 'em · êm · im', subLabel: 'em, êm, im', pageNumber: 40 },
+      { id: 'om_om_om', type: 'rime', label: 'om · ôm · ơm', subLabel: 'om, ôm, ơm', pageNumber: 41 },
+      { id: 'um', type: 'rime', label: 'um', subLabel: 'chùm nho', pageNumber: 42 },
+    ],
+    // Hàng Dưới: Đúng 8 đơn vị (Vần kết thúc bằng ng và nh)
+    row2: [
+      { id: 'ang_ang_ang', type: 'rime', label: 'ang · ăng · âng', subLabel: 'ang, ăng, âng', pageNumber: 58 },
+      { id: 'eng_ieng', type: 'rime', label: 'eng · iêng', subLabel: 'kẻng, riêng', pageNumber: 60 },
+      { id: 'ong_ong', type: 'rime', label: 'ong · ông', subLabel: 'ong, hồng', pageNumber: 61 },
+      { id: 'ung_ung', type: 'rime', label: 'ung · ưng', subLabel: 'sung, ưng', pageNumber: 62 },
+      { id: 'anh_enh_inh', type: 'rime', label: 'anh · ênh · inh', subLabel: 'bức tranh', pageNumber: 56 },
+      { id: 'oang_oang', type: 'rime', label: 'oang · oăng', subLabel: 'khoang tàu', pageNumber: 64 },
+      { id: 'uong_uong', type: 'rime', label: 'uông · ương', subLabel: 'chuông gió', pageNumber: 65 },
+      { id: 'ieng_yeng', type: 'rime', label: 'iêng · yểng', subLabel: 'chim yểng', pageNumber: 66 },
+    ],
+  },
+  {
+    id: 'part5',
+    title: 'Phần 5',
+    name: 'Phần 5: Vần Âm Cuối -t, -c, -p, -ch & Vần Phức',
+    stageLabel: 'Giai đoạn 3 (Trang 44 - 98)',
+    description: 'Các vần khép âm cuối t, c, p, ch và vần phức hợp ba âm tiết (Trang 44 - 98 sách gốc)',
+    badgeColor: 'rose',
+    // Hàng Trên: Đúng 8 đơn vị (Vần kết thúc bằng t và c)
+    row1: [
+      { id: 'at_at_at', type: 'rime', label: 'at · ăt · ât', subLabel: 'bãi cát', pageNumber: 44 },
+      { id: 'et_et_it', type: 'rime', label: 'et · êt · it', subLabel: 'con vẹt', pageNumber: 46 },
+      { id: 'ot_ot_ot', type: 'rime', label: 'ot · ôt · ơt', subLabel: 'quả nhót', pageNumber: 47 },
+      { id: 'ut_ut', type: 'rime', label: 'ut · ưt', subLabel: 'cây bút', pageNumber: 48 },
+      { id: 'ac_ac_ac', type: 'rime', label: 'ac · ăc · âc', subLabel: 'con hạc', pageNumber: 51 },
+      { id: 'oc_oc_uc', type: 'rime', label: 'oc · ôc · uc', subLabel: 'con cóc', pageNumber: 53 },
+      { id: 'oc_uc2', type: 'rime', label: 'ơc · ưc', subLabel: 'mực nang', pageNumber: 54 },
+      { id: 'oac_oac', type: 'rime', label: 'oac · oăc', subLabel: 'áo khoác', pageNumber: 55 },
+    ],
+    // Hàng Dưới: Đúng 8 đơn vị (Vần kết thúc bằng p, ch và vần phức)
+    row2: [
+      { id: 'ap_ap_ap', type: 'rime', label: 'ap · ăp · âp', subLabel: 'xe đạp', pageNumber: 68 },
+      { id: 'ep_ep_ip', type: 'rime', label: 'ep · êp · ip', subLabel: 'đôi dép', pageNumber: 70 },
+      { id: 'op_op_op', type: 'rime', label: 'op · ôp · ơp', subLabel: 'hộp quà', pageNumber: 71 },
+      { id: 'up', type: 'rime', label: 'up', subLabel: 'búp sen', pageNumber: 72 },
+      { id: 'ach_ech_ich', type: 'rime', label: 'ach · êch · ich', subLabel: 'cuốn sách', pageNumber: 74 },
+      { id: 'oan_oan_oan', type: 'rime', label: 'oan · oăn', subLabel: 'bé ngoan', pageNumber: 80 },
+      { id: 'oat_oat', type: 'rime', label: 'oat · oăt', subLabel: 'thoăn thoắt', pageNumber: 82 },
+      { id: 'uyen_uyet', type: 'rime', label: 'uyên · uyết', subLabel: 'chim khuyên', pageNumber: 86 },
     ],
   },
 ];
+
 

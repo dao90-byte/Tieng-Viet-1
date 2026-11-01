@@ -146,93 +146,108 @@ export const PhonicsMatrixTab: React.FC<PhonicsMatrixTabProps> = ({
     onGainStar();
   };
 
-  const renderUnitLabel = (label: string) => {
-    if (label.length <= 2) {
-      return (
-        <span className="font-black text-xl sm:text-2xl tracking-tight leading-none">
-          {label}
-        </span>
-      );
-    }
-    if (!label.includes('·') && label.length <= 7) {
-      return (
-        <span className="font-black text-sm sm:text-base tracking-tight leading-none px-1 text-center">
-          {label}
-        </span>
-      );
-    }
-    // Cho các cụm nhiều vần (an · ăn · ân, anh · ênh · inh...) hiển thị trọn vẹn, không tràn chữ
+  const renderUnitLabel = (unit: LessonUnitItem) => {
+    const { label, subLabel, pageNumber } = unit;
     return (
-      <span className="font-extrabold text-[11px] sm:text-xs md:text-sm tracking-tight text-center leading-tight px-0.5 line-clamp-2">
-        {label}
-      </span>
+      <div className="flex flex-col items-center justify-center w-full px-1 py-1">
+        <span
+          className={`font-black tracking-tight leading-tight text-center ${
+            label.length <= 2
+              ? 'text-lg sm:text-2xl'
+              : label.length <= 7
+              ? 'text-xs sm:text-base font-black'
+              : 'text-[11px] sm:text-xs md:text-sm font-extrabold line-clamp-1'
+          }`}
+        >
+          {label}
+        </span>
+        <span className="text-[10px] sm:text-[11px] font-medium opacity-75 leading-tight truncate max-w-full mt-0.5">
+          {pageNumber ? `Tr.${pageNumber}` : subLabel}
+        </span>
+      </div>
     );
   };
 
   return (
     <div className="space-y-6 pb-16">
       {/* THANH CHỌN PHẦN VÀ 2 HÀNG ĐƠN VỊ TỐI GIẢN */}
-      <div className="bg-white rounded-3xl p-3 sm:p-4 border border-slate-200/90 shadow-sm space-y-3">
-        {/* Thanh chọn Phần 1, Phần 2, Phần 3 trực quan, thẩm mỹ, dễ bấm */}
-        <div className="bg-slate-100/90 p-1.5 rounded-2xl flex items-center justify-center gap-1.5 sm:gap-2 border border-slate-200 shadow-inner">
+      <div className="bg-white rounded-3xl p-3 sm:p-5 border border-slate-200 shadow-sm space-y-4">
+        {/* Thanh chọn 5 Phần học trực quan, chuẩn thứ tự trang sách gốc */}
+        <div className="grid grid-cols-2 sm:grid-cols-5 gap-2 bg-slate-100/90 p-2 rounded-2xl border border-slate-200">
           {LESSON_PARTS.map((part) => {
             const isSelected = part.id === currentPart.id;
             return (
               <button
                 key={part.id}
                 onClick={() => handleSelectPart(part)}
-                className={`flex-1 py-2.5 sm:py-3 px-3 rounded-xl font-black text-sm sm:text-base transition-all cursor-pointer text-center ${
+                className={`py-2.5 px-2 rounded-xl transition-all cursor-pointer text-center flex flex-col items-center justify-center ${
                   isSelected
-                    ? 'bg-sky-500 text-white shadow-sm scale-[1.01]'
-                    : 'text-slate-600 hover:text-slate-900 hover:bg-white/80'
+                    ? 'bg-sky-500 text-white shadow-md scale-[1.02] ring-2 ring-sky-300'
+                    : 'text-slate-700 hover:text-slate-900 hover:bg-white/90 bg-white/60'
                 }`}
               >
-                <span>{part.title}</span>
+                <span className="font-black text-sm sm:text-base tracking-tight">{part.title}</span>
+                <span className={`text-[10px] sm:text-[11px] font-medium truncate max-w-full ${
+                  isSelected ? 'text-sky-100' : 'text-slate-500'
+                }`}>
+                  {part.stageLabel.replace('Giai đoạn ', 'GĐ ')}
+                </span>
               </button>
             );
           })}
         </div>
 
-        {/* 2 HÀNG ĐƠN VỊ XẾP NGAY NGẮN, PHÂN BIỆT BẰNG MÀU SẮC */}
-        <div className="space-y-2.5 pt-1">
-          {/* HÀNG TRÊN: 8 ĐƠN VỊ MÀU XANH DƯƠNG */}
-          <div className="bg-sky-50/60 rounded-2xl p-2 sm:p-2.5 border-2 border-sky-200/90">
-            <div className="grid grid-cols-4 sm:grid-cols-8 gap-1.5 sm:gap-2">
+        {/* Thông tin phần học đang chọn */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 px-1 text-xs sm:text-sm">
+          <div className="flex items-center gap-2">
+            <span className="font-black text-slate-800 text-base">{currentPart.name}</span>
+            <span className="bg-sky-100 text-sky-800 px-2 py-0.5 rounded-full font-bold text-xs">
+              {currentPart.stageLabel}
+            </span>
+          </div>
+          <span className="text-slate-500 italic text-xs">{currentPart.description}</span>
+        </div>
+
+        {/* 2 HÀNG ĐƠN VỊ XẾP NGAY NGẮN (8 ĐƠN VỊ / HÀNG) PHÂN BIỆT BẰNG MÀU SẮC */}
+        <div className="space-y-3 pt-1">
+          {/* HÀNG TRÊN: ĐÚNG 8 ĐƠN VỊ MÀU XANH DƯƠNG */}
+          <div className="bg-sky-50/70 rounded-2xl p-2 sm:p-3 border-2 border-sky-200">
+            <div className="grid grid-cols-4 sm:grid-cols-8 gap-2">
               {currentPart.row1.map((unit) => {
                 const isSelected = unit.id === activeUnitItem.id;
                 return (
                   <button
                     key={unit.id}
                     onClick={() => handleSelectUnit(unit)}
-                    className={`min-h-[3.6rem] sm:min-h-[4rem] rounded-xl sm:rounded-2xl border-2 transition-all cursor-pointer flex items-center justify-center text-center p-1 shadow-2xs ${
+                    className={`min-h-[4rem] sm:min-h-[4.4rem] rounded-xl sm:rounded-2xl border-2 transition-all cursor-pointer flex items-center justify-center text-center p-1 shadow-2xs ${
                       isSelected
                         ? 'bg-sky-500 text-white border-sky-600 shadow-md ring-4 ring-sky-200 scale-105 z-10'
                         : 'bg-white hover:bg-sky-100/90 text-sky-950 border-sky-200 hover:border-sky-400'
                     }`}
                   >
-                    {renderUnitLabel(unit.label)}
+                    {renderUnitLabel(unit)}
                   </button>
                 );
               })}
             </div>
           </div>
 
-          {/* HÀNG DƯỚI: 8 ĐƠN VỊ MÀU XANH LÁ */}
-          <div className="bg-emerald-50/60 rounded-2xl p-2 sm:p-2.5 border-2 border-emerald-200/90">
-            <div className="grid grid-cols-4 sm:grid-cols-8 gap-1.5 sm:gap-2">
+          {/* HÀNG DƯỚI: ĐÚNG 8 ĐƠN VỊ MÀU XANH LÁ */}
+          <div className="bg-emerald-50/70 rounded-2xl p-2 sm:p-3 border-2 border-emerald-200">
+            <div className="grid grid-cols-4 sm:grid-cols-8 gap-2">
               {currentPart.row2.map((unit) => {
                 const isSelected = unit.id === activeUnitItem.id;
                 return (
                   <button
                     key={unit.id}
                     onClick={() => handleSelectUnit(unit)}
-                    className={`min-h-[3.6rem] sm:min-h-[4rem] rounded-xl sm:rounded-2xl border-2 transition-all cursor-pointer flex items-center justify-center text-center p-1 shadow-2xs ${
+                    className={`min-h-[4rem] sm:min-h-[4.4rem] rounded-xl sm:rounded-2xl border-2 transition-all cursor-pointer flex items-center justify-center text-center p-1 shadow-2xs ${
                       isSelected
                         ? 'bg-emerald-600 text-white border-emerald-700 shadow-md ring-4 ring-emerald-200 scale-105 z-10'
                         : 'bg-white hover:bg-emerald-100/90 text-emerald-950 border-emerald-200 hover:border-emerald-400'
                     }`}
                   >
-                    {renderUnitLabel(unit.label)}
+                    {renderUnitLabel(unit)}
                   </button>
                 );
               })}
@@ -299,11 +314,18 @@ export const PhonicsMatrixTab: React.FC<PhonicsMatrixTabProps> = ({
                 <tbody>
                   {consonantLesson.rows.map((row) => (
                     <tr key={row.vowel} className="group">
-                      {/* Nguyên âm */}
+                      {/* Nguyên âm: Bấm vào nghe phát âm nguyên âm chuẩn xác */}
                       <td className="p-2">
-                        <span className="inline-block w-9 h-9 leading-9 rounded-xl bg-slate-100 font-black text-sky-600 text-lg border border-slate-200">
+                        <button
+                          onClick={() => {
+                            speakAI(row.vowel, { rate: effectiveRate });
+                            onGainStar();
+                          }}
+                          title={`Bấm để nghe nguyên âm ${row.vowel}`}
+                          className="inline-block w-9 h-9 leading-9 rounded-xl bg-slate-100 hover:bg-sky-100 active:scale-95 font-black text-sky-600 hover:text-sky-800 text-lg border border-slate-200 hover:border-sky-300 transition-all cursor-pointer shadow-2xs hover:scale-105"
+                        >
                           {row.vowel}
-                        </span>
+                        </button>
                       </td>
 
                       {/* Mũi tên ghép */}
@@ -547,11 +569,34 @@ export const PhonicsMatrixTab: React.FC<PhonicsMatrixTabProps> = ({
       {/* ========================================================================= */}
       {!isConsonant && (
         <div className="bg-gradient-to-br from-sky-50/70 via-white to-amber-50/50 rounded-3xl p-5 sm:p-7 border-2 border-sky-300 shadow-sm space-y-5">
-          {/* Tiêu đề bài vần */}
-          <div className="pb-2 border-b border-sky-100">
-            <h3 className="text-2xl sm:text-3xl font-black text-slate-800">
-              {rimeLesson.title}
-            </h3>
+          {/* Tiêu đề bài vần & Nút phát âm/đánh vần từng vần tương tác */}
+          <div className="pb-3 border-b border-sky-100 flex flex-wrap items-center justify-between gap-3">
+            <div className="flex items-center gap-3">
+              <span className="text-sm font-bold text-slate-500 hidden sm:inline">Tập đánh vần:</span>
+              <div className="flex items-center gap-2">
+                {rimeLesson.rimes.map((r) => {
+                  const isActive = activeWord === r;
+                  return (
+                    <button
+                      key={r}
+                      onClick={() => handleMatrixWordClick(r)}
+                      title={`Bấm để đánh vần vần ${r}`}
+                      className={`px-4 py-2 rounded-2xl font-black text-xl sm:text-2xl border-2 transition-all cursor-pointer shadow-xs flex items-center gap-2 ${
+                        isActive
+                          ? 'bg-sky-500 text-white border-sky-600 scale-105 shadow-md ring-4 ring-sky-200'
+                          : 'bg-white hover:bg-sky-50 text-sky-950 border-sky-200 hover:border-sky-400'
+                      }`}
+                    >
+                      <span>{r}</span>
+                      <Volume2 className="w-4 h-4 text-sky-600 shrink-0" />
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+            <span className="text-xs font-bold text-slate-400">
+              Chạm vào vần để nghe đánh vần
+            </span>
           </div>
 
           {/* 1. Thẻ từ minh họa vần (Bấm vào phát âm cả từ ngay lập tức) */}
