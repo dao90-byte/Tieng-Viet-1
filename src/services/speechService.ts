@@ -171,7 +171,7 @@ export function analyzeSyllable(rawWord: string): SpellingAnalysis {
     ay: {
       steps: [
         { text: 'a', label: 'a' },
-        { text: 'y', label: 'y' },
+        { text: 'i dài', label: 'y' },
         { text: 'ay', label: 'ay' },
       ],
       script: 'a - y - ay',
@@ -179,7 +179,7 @@ export function analyzeSyllable(rawWord: string): SpellingAnalysis {
     ây: {
       steps: [
         { text: 'ớ', label: 'â' },
-        { text: 'y', label: 'y' },
+        { text: 'i dài', label: 'y' },
         { text: 'ây', label: 'ây' },
       ],
       script: 'â - y - ây',
@@ -417,7 +417,7 @@ export function getPreferredReadingVoice(): string | null {
 const STANDALONE_LETTER_SOUNDS: Record<string, string> = {
   p: 'pờ',
   q: 'qui',
-  y: 'y',
+  y: 'i dài',
   k: 'ca',
   d: 'dờ',
   đ: 'đờ',
@@ -553,8 +553,55 @@ export function speakWebSpeech(
 }
 
 /**
- * Phát âm kết hợp đồng bộ toàn hệ thống bằng giọng nữ chuẩn đã thiết lập ở Bảng Chữ & Dấu
- * Đảm bảo âm thanh phát NGAY LẬP TỨC (<15ms), không bị độ trễ mạng hay đổi giọng
+ * Gọi API Gemini TTS để lấy audio WAV base64 với giọng cô giáo tiểu học chuẩn mực, truyền cảm
+ */
+export async function fetchTTSAudio(
+  text: string,
+  style?: string
+): Promise<string | null> {
+  const trimmed = text.trim();
+  if (!trimmed) return null;
+  const cacheKey = `${trimmed}_${style || 'default'}`;
+  if (clientAudioCache.has(cacheKey)) {
+    return clientAudioCache.get(cacheKey)!;
+  }
+
+  if (Date.now() < ttsApiDisabledUntil) {
+    return null;
+  }
+
+  try {
+    const res = await fetch('/api/tts', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        text: trimmed,
+        style:
+          style ||
+          'A gentle, warm Vietnamese primary school teacher pronouncing Vietnamese letters and phonics clearly, accurately and slowly for first grade children. Ensure bé has an open e sound, bê has a close ê sound, and ay has an ay sound distinct from ai.',
+      }),
+    });
+
+    if (!res.ok) {
+      if (res.status === 429 || res.status === 503) {
+        ttsApiDisabledUntil = Date.now() + 15000;
+      }
+      return null;
+    }
+
+    const data = await res.json();
+    if (data.audioBase64) {
+      clientAudioCache.set(cacheKey, data.audioBase64);
+      return data.audioBase64;
+    }
+  } catch {
+    ttsApiDisabledUntil = Date.now() + 15000;
+  }
+  return null;
+}
+
+/**
+ * Phát âm kết hợp đồng bộ toàn hệ thống: Ưu tiên AI Studio Gemini TTS, tự động fallback Web Speech
  */
 export async function speakAI(
   text: string,
@@ -571,7 +618,24 @@ export async function speakAI(
   options.onStart?.();
 
   const trimmed = text.trim();
-  // Phát tức thì bằng giọng nữ chuẩn tiếng Việt đồng nhất toàn ứng dụng
+  if (!trimmed) {
+    options.onEnd?.();
+    return;
+  }
+
+  // 1. Ưu tiên âm thanh AI chân thực từ Gemini TTS (giọng nữ cô giáo chuẩn mực, phát âm chính xác tuyệt đối bé, bê, ay)
+  const audioBase64 = await fetchTTSAudio(trimmed, options.style);
+  if (audioBase64) {
+    try {
+      await playAudioBase64(audioBase64);
+      options.onEnd?.();
+      return;
+    } catch {
+      // Fallback nếu trình duyệt chặn autoplay Audio
+    }
+  }
+
+  // 2. Fallback trình duyệt Web Speech API
   await speakWebSpeech(
     trimmed,
     options.rate || 0.95,
@@ -622,7 +686,8 @@ export function stopAllSpeech() {
 }
 
 /**
- * Phát âm đánh vần từng bước tốc độ nhanh, nhịp nhàng (bờ - a - ba - sắc - bá)
+ * Phát âm đánh vần: Đọc trọn vẹn câu đánh vần nhịp nhàng của cô giáo
+ * (ví dụ: "bờ - e - be - sắc - bé", "bờ - ê - bê", "a - y - ay")
  */
 export async function spellOutSyllable(
   word: string,
@@ -631,12 +696,38 @@ export async function spellOutSyllable(
   stopAllSpeech();
   const analysis = analyzeSyllable(word);
 
+  // 1. Ưu tiên âm thanh AI Gemini TTS đọc trọn vẹn câu đánh vần nhịp nhàng của cô giáo
+  const spellingText = analysis.spellingScript;
+  const audioBase64 = await fetchTTSAudio(
+    spellingText,
+    `A gentle Vietnamese primary school teacher spelling out letters slowly, rhythmically and clearly for a first grader: ${spellingText}. Ensure bé has an open e sound, bê has a close ê sound, and ay has an ay sound distinct from ai.`
+  );
+
+  if (audioBase64) {
+    onStepChange?.({ text: spellingText, label: spellingText }, 0);
+    const stepCount = analysis.steps.length;
+    let stepIdx = 0;
+    const intervalTime = Math.max(350, Math.min(800, 2200 / (stepCount || 1)));
+    const interval = setInterval(() => {
+      if (stepIdx < stepCount) {
+        onStepChange?.(analysis.steps[stepIdx], stepIdx);
+        stepIdx++;
+      }
+    }, intervalTime);
+    try {
+      await playAudioBase64(audioBase64);
+    } finally {
+      clearInterval(interval);
+      onStepChange?.(analysis.steps[stepCount - 1], stepCount - 1);
+    }
+    return;
+  }
+
+  // 2. Web Speech fallback
   for (let i = 0; i < analysis.steps.length; i++) {
     const step = analysis.steps[i];
     onStepChange?.(step, i);
-    // Tốc độ đánh vần chuẩn mực sư phạm (rate 0.95), tròn vành rõ chữ, phân biệt sắc nét e và ê
     await speakWebSpeech(step.text, 0.95, preferredReadingVoiceUri);
-    // Khoảng dừng nhịp điệu tự nhiên 120ms giúp trẻ nhỏ cảm nhận rõ từng âm tiết
-    await new Promise(r => setTimeout(r, 120));
+    await new Promise((r) => setTimeout(r, 120));
   }
 }
