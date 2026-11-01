@@ -57,6 +57,72 @@ function persistCache() {
   }
 }
 
+// Bảng phiên âm chuẩn giáo dục tiểu học khi phát âm chữ cái đơn hoặc âm ghép
+const PHONIC_SOUND_MAP: Record<string, string> = {
+  p: 'pờ',
+  q: 'qui',
+  y: 'i dài',
+  k: 'ca',
+  d: 'dờ',
+  đ: 'đờ',
+  b: 'bờ',
+  c: 'cờ',
+  g: 'gờ',
+  h: 'hờ',
+  l: 'lờ',
+  m: 'mờ',
+  n: 'nờ',
+  r: 'rờ',
+  s: 'sờ',
+  t: 'tờ',
+  v: 'vờ',
+  x: 'xờ',
+  ch: 'chờ',
+  gh: 'gờ',
+  gi: 'gi',
+  kh: 'khờ',
+  nh: 'nhờ',
+  ng: 'ngờ',
+  ngh: 'ngờ',
+  ph: 'phờ',
+  qu: 'quờ',
+  th: 'thờ',
+  tr: 'trờ',
+  a: 'a',
+  ă: 'á',
+  â: 'ớ',
+  e: 'e',
+  ê: 'ê',
+  i: 'i',
+  o: 'o',
+  ô: 'ô',
+  ơ: 'ơ',
+  u: 'u',
+  ư: 'ư',
+};
+
+function cleanServerText(input: string): string {
+  if (!input) return '';
+  let clean = input.trim();
+  const lower = clean.toLowerCase();
+  if (PHONIC_SOUND_MAP[lower]) {
+    return PHONIC_SOUND_MAP[lower];
+  }
+  clean = clean
+    .replace(/\b[Cc]hữ\s+p\b/g, 'Chữ pờ')
+    .replace(/\b[Cc]hữ\s+P\b/g, 'Chữ pờ')
+    .replace(/\b[Cc]hữ\s+q\b/g, 'Chữ qui')
+    .replace(/\b[Cc]hữ\s+Q\b/g, 'Chữ qui')
+    .replace(/\b[Cc]hữ\s+y\b/g, 'Chữ i dài')
+    .replace(/\b[Cc]hữ\s+Y\b/g, 'Chữ i dài');
+
+  // Chuyển dấu gạch nối, chấm tròn thành dấu phẩy và khoảng trắng ngắt nhịp tự nhiên
+  clean = clean.replace(/\s*[-–—•·/]\s*/g, ', ');
+  clean = clean.replace(/([a-zA-ZÀ-ỹ]+)-([a-zA-ZÀ-ỹ]+)/g, '$1 $2');
+  clean = clean.replace(/^[•\-\*]\s*/, '').replace(/["“”«»]/g, '');
+  return clean;
+}
+
 // API route for AI Vietnamese Text-to-Speech
 app.post('/api/tts', async (req, res) => {
   try {
@@ -66,11 +132,20 @@ app.post('/api/tts', async (req, res) => {
     }
 
     const trimmedText = text.trim();
-    const cacheKey = `${trimmedText}_${style || 'default'}`;
+    const cleanedText = cleanServerText(trimmedText);
+    const cacheKey = `${cleanedText}_${style || 'default'}`;
+    const rawKey = `${trimmedText}_${style || 'default'}`;
 
     if (audioCache.has(cacheKey)) {
       return res.json({
         audioBase64: audioCache.get(cacheKey),
+        cached: true,
+      });
+    }
+
+    if (audioCache.has(rawKey)) {
+      return res.json({
+        audioBase64: audioCache.get(rawKey),
         cached: true,
       });
     }
@@ -86,7 +161,7 @@ app.post('/api/tts', async (req, res) => {
 
     // 1. Unified high-quality Vietnamese standard voice engine (100% accurate pronunciation, zero-quota limit, instant response)
     try {
-      const ttsUrl = `https://translate.google.com/translate_tts?ie=UTF-8&tl=vi&client=tw-ob&q=${encodeURIComponent(trimmedText)}`;
+      const ttsUrl = `https://translate.google.com/translate_tts?ie=UTF-8&tl=vi&client=tw-ob&q=${encodeURIComponent(cleanedText)}`;
       const googleRes = await fetch(ttsUrl, {
         headers: {
           'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
@@ -162,6 +237,9 @@ app.post('/api/tts', async (req, res) => {
       if (firstKey) audioCache.delete(firstKey);
     }
     audioCache.set(cacheKey, audioBase64);
+    if (rawKey !== cacheKey) {
+      audioCache.set(rawKey, audioBase64);
+    }
     persistCache();
 
     return res.json({

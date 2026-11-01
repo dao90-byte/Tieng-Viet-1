@@ -97,6 +97,7 @@ const TONE_MAP: Record<string, { baseChar: string; tone: string }> = {
 const CONSONANT_SOUNDS: Record<string, string> = {
   b: 'bờ',
   c: 'cờ',
+  ch: 'chờ',
   d: 'dờ',
   đ: 'đờ',
   g: 'gờ',
@@ -296,6 +297,24 @@ export function analyzeSyllable(rawWord: string): SpellingAnalysis {
       ],
       script: 'u - a - ua',
     },
+    // 27 Vần chính theo yêu cầu & các vần chuẩn sách giáo khoa
+    ưu: {
+      steps: [
+        { text: 'ư', label: 'ư' },
+        { text: 'u', label: 'u' },
+        { text: 'ưu', label: 'ưu' },
+      ],
+      script: 'ư - u - ưu',
+    },
+    uya: {
+      steps: [
+        { text: 'u', label: 'u' },
+        { text: 'i dài', label: 'y' },
+        { text: 'a', label: 'a' },
+        { text: 'uya', label: 'uya' },
+      ],
+      script: 'u - y - a - uya',
+    },
     ưa: {
       steps: [
         { text: 'ư', label: 'ư' },
@@ -304,6 +323,277 @@ export function analyzeSyllable(rawWord: string): SpellingAnalysis {
       ],
       script: 'ư - a - ưa',
     },
+    oăng: {
+      steps: [
+        { text: 'o', label: 'o' },
+        { text: 'á', label: 'ă' },
+        { text: 'ngờ', label: 'ng' },
+        { text: 'oăng', label: 'oăng' },
+      ],
+      script: 'o - ăng - oăng',
+    },
+    at: {
+      steps: [
+        { text: 'a', label: 'a' },
+        { text: 'tờ', label: 't' },
+        { text: 'at', label: 'at' },
+      ],
+      script: 'a - tờ - at',
+    },
+    et: {
+      steps: [
+        { text: 'e', label: 'e' },
+        { text: 'tờ', label: 't' },
+        { text: 'et', label: 'et' },
+      ],
+      script: 'e - tờ - et',
+    },
+    êt: {
+      steps: [
+        { text: 'ê', label: 'ê' },
+        { text: 'tờ', label: 't' },
+        { text: 'êt', label: 'êt' },
+      ],
+      script: 'ê - tờ - êt',
+    },
+    ut: {
+      steps: [
+        { text: 'u', label: 'u' },
+        { text: 'tờ', label: 't' },
+        { text: 'ut', label: 'ut' },
+      ],
+      script: 'u - tờ - ut',
+    },
+    ưt: {
+      steps: [
+        { text: 'ư', label: 'ư' },
+        { text: 'tờ', label: 't' },
+        { text: 'ưt', label: 'ưt' },
+      ],
+      script: 'ư - tờ - ưt',
+    },
+    ac: {
+      steps: [
+        { text: 'a', label: 'a' },
+        { text: 'cờ', label: 'c' },
+        { text: 'ac', label: 'ac' },
+      ],
+      script: 'a - cờ - ac',
+    },
+    ôc: {
+      steps: [
+        { text: 'ô', label: 'ô' },
+        { text: 'cờ', label: 'c' },
+        { text: 'ôc', label: 'ôc' },
+      ],
+      script: 'ô - cờ - ôc',
+    },
+    uc: {
+      steps: [
+        { text: 'u', label: 'u' },
+        { text: 'cờ', label: 'c' },
+        { text: 'uc', label: 'uc' },
+      ],
+      script: 'u - cờ - uc',
+    },
+    ơc: {
+      steps: [
+        { text: 'ơ', label: 'ơ' },
+        { text: 'cờ', label: 'c' },
+        { text: 'ơc', label: 'ơc' },
+      ],
+      script: 'ơ - cờ - ơc',
+    },
+    ưc: {
+      steps: [
+        { text: 'ư', label: 'ư' },
+        { text: 'cờ', label: 'c' },
+        { text: 'ưc', label: 'ưc' },
+      ],
+      script: 'ư - cờ - ưc',
+    },
+    oac: {
+      steps: [
+        { text: 'o', label: 'o' },
+        { text: 'a', label: 'a' },
+        { text: 'cờ', label: 'c' },
+        { text: 'oac', label: 'oac' },
+      ],
+      script: 'o - ac - oac',
+    },
+    oăc: {
+      steps: [
+        { text: 'o', label: 'o' },
+        { text: 'á', label: 'ă' },
+        { text: 'cờ', label: 'c' },
+        { text: 'oăc', label: 'oăc' },
+      ],
+      script: 'o - ăc - oăc',
+    },
+    ap: {
+      steps: [
+        { text: 'a', label: 'a' },
+        { text: 'pờ', label: 'p' },
+        { text: 'ap', label: 'ap' },
+      ],
+      script: 'a - pờ - ap',
+    },
+    up: {
+      steps: [
+        { text: 'u', label: 'u' },
+        { text: 'pờ', label: 'p' },
+        { text: 'up', label: 'up' },
+      ],
+      script: 'u - pờ - up',
+    },
+    ach: {
+      steps: [
+        { text: 'a', label: 'a' },
+        { text: 'chờ', label: 'ch' },
+        { text: 'ach', label: 'ach' },
+      ],
+      script: 'a - chờ - ach',
+    },
+    oan: {
+      steps: [
+        { text: 'o', label: 'o' },
+        { text: 'a', label: 'a' },
+        { text: 'nờ', label: 'n' },
+        { text: 'oan', label: 'oan' },
+      ],
+      script: 'o - an - oan',
+    },
+    oăn: {
+      steps: [
+        { text: 'o', label: 'o' },
+        { text: 'á', label: 'ă' },
+        { text: 'nờ', label: 'n' },
+        { text: 'oăn', label: 'oăn' },
+      ],
+      script: 'o - ăn - oăn',
+    },
+    oat: {
+      steps: [
+        { text: 'o', label: 'o' },
+        { text: 'a', label: 'a' },
+        { text: 'tờ', label: 't' },
+        { text: 'oat', label: 'oat' },
+      ],
+      script: 'o - at - oat',
+    },
+    oăt: {
+      steps: [
+        { text: 'o', label: 'o' },
+        { text: 'á', label: 'ă' },
+        { text: 'tờ', label: 't' },
+        { text: 'oăt', label: 'oăt' },
+      ],
+      script: 'o - ăt - oăt',
+    },
+    uyên: {
+      steps: [
+        { text: 'u', label: 'u' },
+        { text: 'i dài', label: 'y' },
+        { text: 'ê', label: 'ê' },
+        { text: 'nờ', label: 'n' },
+        { text: 'uyên', label: 'uyên' },
+      ],
+      script: 'u - yên - uyên',
+    },
+    uyêt: {
+      steps: [
+        { text: 'u', label: 'u' },
+        { text: 'i dài', label: 'y' },
+        { text: 'ê', label: 'ê' },
+        { text: 'tờ', label: 't' },
+        { text: 'uyêt', label: 'uyêt' },
+      ],
+      script: 'u - yết - uyêt',
+    },
+    uyet: {
+      steps: [
+        { text: 'u', label: 'u' },
+        { text: 'i dài', label: 'y' },
+        { text: 'ê', label: 'ê' },
+        { text: 'tờ', label: 't' },
+        { text: 'uyết', label: 'uyết' },
+      ],
+      script: 'u - yết - uyêt',
+    },
+    // Các vần bổ sung trong sách giáo khoa
+    ươu: {
+      steps: [{ text: 'ư', label: 'ư' }, { text: 'ơ', label: 'ơ' }, { text: 'u', label: 'u' }, { text: 'ươu', label: 'ươu' }],
+      script: 'ư - ơ - u - ươu',
+    },
+    ăt: { steps: [{ text: 'á', label: 'ă' }, { text: 'tờ', label: 't' }, { text: 'ăt', label: 'ăt' }], script: 'ă - tờ - ăt' },
+    ât: { steps: [{ text: 'ớ', label: 'â' }, { text: 'tờ', label: 't' }, { text: 'ât', label: 'ât' }], script: 'â - tờ - ât' },
+    it: { steps: [{ text: 'i', label: 'i' }, { text: 'tờ', label: 't' }, { text: 'it', label: 'it' }], script: 'i - tờ - it' },
+    ot: { steps: [{ text: 'o', label: 'o' }, { text: 'tờ', label: 't' }, { text: 'ot', label: 'ot' }], script: 'o - tờ - ot' },
+    ôt: { steps: [{ text: 'ô', label: 'ô' }, { text: 'tờ', label: 't' }, { text: 'ôt', label: 'ôt' }], script: 'ô - tờ - ôt' },
+    ơt: { steps: [{ text: 'ơ', label: 'ơ' }, { text: 'tờ', label: 't' }, { text: 'ơt', label: 'ơt' }], script: 'ơ - tờ - ơt' },
+    ăc: { steps: [{ text: 'á', label: 'ă' }, { text: 'cờ', label: 'c' }, { text: 'ăc', label: 'ăc' }], script: 'ă - cờ - ăc' },
+    âc: { steps: [{ text: 'ớ', label: 'â' }, { text: 'cờ', label: 'c' }, { text: 'âc', label: 'âc' }], script: 'â - cờ - âc' },
+    oc: { steps: [{ text: 'o', label: 'o' }, { text: 'cờ', label: 'c' }, { text: 'oc', label: 'oc' }], script: 'o - cờ - oc' },
+    ăp: { steps: [{ text: 'á', label: 'ă' }, { text: 'pờ', label: 'p' }, { text: 'ăp', label: 'ăp' }], script: 'ă - pờ - ăp' },
+    âp: { steps: [{ text: 'ớ', label: 'â' }, { text: 'pờ', label: 'p' }, { text: 'âp', label: 'âp' }], script: 'â - pờ - âp' },
+    ep: { steps: [{ text: 'e', label: 'e' }, { text: 'pờ', label: 'p' }, { text: 'ep', label: 'ep' }], script: 'e - pờ - ep' },
+    êp: { steps: [{ text: 'ê', label: 'ê' }, { text: 'pờ', label: 'p' }, { text: 'êp', label: 'êp' }], script: 'ê - pờ - êp' },
+    ip: { steps: [{ text: 'i', label: 'i' }, { text: 'pờ', label: 'p' }, { text: 'ip', label: 'ip' }], script: 'i - pờ - ip' },
+    op: { steps: [{ text: 'o', label: 'o' }, { text: 'pờ', label: 'p' }, { text: 'op', label: 'op' }], script: 'o - pờ - op' },
+    ôp: { steps: [{ text: 'ô', label: 'ô' }, { text: 'pờ', label: 'p' }, { text: 'ôp', label: 'ôp' }], script: 'ô - pờ - ôp' },
+    ơp: { steps: [{ text: 'ơ', label: 'ơ' }, { text: 'pờ', label: 'p' }, { text: 'ơp', label: 'ơp' }], script: 'ơ - pờ - ơp' },
+    êch: { steps: [{ text: 'ê', label: 'ê' }, { text: 'chờ', label: 'ch' }, { text: 'êch', label: 'êch' }], script: 'ê - chờ - êch' },
+    ich: { steps: [{ text: 'i', label: 'i' }, { text: 'chờ', label: 'ch' }, { text: 'ich', label: 'ich' }], script: 'i - chờ - ich' },
+    an: { steps: [{ text: 'a', label: 'a' }, { text: 'nờ', label: 'n' }, { text: 'an', label: 'an' }], script: 'a - nờ - an' },
+    ăn: { steps: [{ text: 'á', label: 'ă' }, { text: 'nờ', label: 'n' }, { text: 'ăn', label: 'ăn' }], script: 'ă - nờ - ăn' },
+    ân: { steps: [{ text: 'ớ', label: 'â' }, { text: 'nờ', label: 'n' }, { text: 'ân', label: 'ân' }], script: 'â - nờ - ân' },
+    en: { steps: [{ text: 'e', label: 'e' }, { text: 'nờ', label: 'n' }, { text: 'en', label: 'en' }], script: 'e - nờ - en' },
+    ên: { steps: [{ text: 'ê', label: 'ê' }, { text: 'nờ', label: 'n' }, { text: 'ên', label: 'ên' }], script: 'ê - nờ - ên' },
+    in: { steps: [{ text: 'i', label: 'i' }, { text: 'nờ', label: 'n' }, { text: 'in', label: 'in' }], script: 'i - nờ - in' },
+    on: { steps: [{ text: 'o', label: 'o' }, { text: 'nờ', label: 'n' }, { text: 'on', label: 'on' }], script: 'o - nờ - on' },
+    ôn: { steps: [{ text: 'ô', label: 'ô' }, { text: 'nờ', label: 'n' }, { text: 'ôn', label: 'ôn' }], script: 'ô - nờ - ôn' },
+    ơn: { steps: [{ text: 'ơ', label: 'ơ' }, { text: 'nờ', label: 'n' }, { text: 'ơn', label: 'ơn' }], script: 'ơ - nờ - ơn' },
+    un: { steps: [{ text: 'u', label: 'u' }, { text: 'nờ', label: 'n' }, { text: 'un', label: 'un' }], script: 'u - nờ - un' },
+    am: { steps: [{ text: 'a', label: 'a' }, { text: 'mờ', label: 'm' }, { text: 'am', label: 'am' }], script: 'a - mờ - am' },
+    ăm: { steps: [{ text: 'á', label: 'ă' }, { text: 'mờ', label: 'm' }, { text: 'ăm', label: 'ăm' }], script: 'ă - mờ - ăm' },
+    âm: { steps: [{ text: 'ớ', label: 'â' }, { text: 'mờ', label: 'm' }, { text: 'âm', label: 'âm' }], script: 'â - mờ - âm' },
+    em: { steps: [{ text: 'e', label: 'e' }, { text: 'mờ', label: 'm' }, { text: 'em', label: 'em' }], script: 'e - mờ - em' },
+    êm: { steps: [{ text: 'ê', label: 'ê' }, { text: 'mờ', label: 'm' }, { text: 'êm', label: 'êm' }], script: 'ê - mờ - êm' },
+    im: { steps: [{ text: 'i', label: 'i' }, { text: 'mờ', label: 'm' }, { text: 'im', label: 'im' }], script: 'i - mờ - im' },
+    om: { steps: [{ text: 'o', label: 'o' }, { text: 'mờ', label: 'm' }, { text: 'om', label: 'om' }], script: 'o - mờ - om' },
+    ôm: { steps: [{ text: 'ô', label: 'ô' }, { text: 'mờ', label: 'm' }, { text: 'ôm', label: 'ôm' }], script: 'ô - mờ - ôm' },
+    ơm: { steps: [{ text: 'ơ', label: 'ơ' }, { text: 'mờ', label: 'm' }, { text: 'ơm', label: 'ơm' }], script: 'ơ - mờ - ơm' },
+    um: { steps: [{ text: 'u', label: 'u' }, { text: 'mờ', label: 'm' }, { text: 'um', label: 'um' }], script: 'u - mờ - um' },
+    ang: { steps: [{ text: 'a', label: 'a' }, { text: 'ngờ', label: 'ng' }, { text: 'ang', label: 'ang' }], script: 'a - ngờ - ang' },
+    ăng: { steps: [{ text: 'á', label: 'ă' }, { text: 'ngờ', label: 'ng' }, { text: 'ăng', label: 'ăng' }], script: 'ă - ngờ - ăng' },
+    âng: { steps: [{ text: 'ớ', label: 'â' }, { text: 'ngờ', label: 'ng' }, { text: 'âng', label: 'âng' }], script: 'â - ngờ - âng' },
+    eng: { steps: [{ text: 'e', label: 'e' }, { text: 'ngờ', label: 'ng' }, { text: 'eng', label: 'eng' }], script: 'e - ngờ - eng' },
+    iêng: { steps: [{ text: 'i', label: 'i' }, { text: 'ê', label: 'ê' }, { text: 'ngờ', label: 'ng' }, { text: 'iêng', label: 'iêng' }], script: 'i - ê - ngờ - iêng' },
+    ong: { steps: [{ text: 'o', label: 'o' }, { text: 'ngờ', label: 'ng' }, { text: 'ong', label: 'ong' }], script: 'o - ngờ - ong' },
+    ông: { steps: [{ text: 'ô', label: 'ô' }, { text: 'ngờ', label: 'ng' }, { text: 'ông', label: 'ông' }], script: 'ô - ngờ - ông' },
+    ung: { steps: [{ text: 'u', label: 'u' }, { text: 'ngờ', label: 'ng' }, { text: 'ung', label: 'ung' }], script: 'u - ngờ - ung' },
+    ưng: { steps: [{ text: 'ư', label: 'ư' }, { text: 'ngờ', label: 'ng' }, { text: 'ưng', label: 'ưng' }], script: 'ư - ngờ - ưng' },
+    anh: { steps: [{ text: 'a', label: 'a' }, { text: 'nhờ', label: 'nh' }, { text: 'anh', label: 'anh' }], script: 'a - nhờ - anh' },
+    ênh: { steps: [{ text: 'ê', label: 'ê' }, { text: 'nhờ', label: 'nh' }, { text: 'ênh', label: 'ênh' }], script: 'ê - nhờ - ênh' },
+    inh: { steps: [{ text: 'i', label: 'i' }, { text: 'nhờ', label: 'nh' }, { text: 'inh', label: 'inh' }], script: 'i - nhờ - inh' },
+    oang: { steps: [{ text: 'o', label: 'o' }, { text: 'a', label: 'a' }, { text: 'ngờ', label: 'ng' }, { text: 'oang', label: 'oang' }], script: 'o - ang - oang' },
+    uông: { steps: [{ text: 'u', label: 'u' }, { text: 'ô', label: 'ô' }, { text: 'ngờ', label: 'ng' }, { text: 'uông', label: 'uông' }], script: 'u - ô - ngờ - uông' },
+    ương: { steps: [{ text: 'ư', label: 'ư' }, { text: 'ơ', label: 'ơ' }, { text: 'ngờ', label: 'ng' }, { text: 'ương', label: 'ương' }], script: 'ư - ơ - ngờ - ương' },
+    oai: { steps: [{ text: 'o', label: 'o' }, { text: 'a', label: 'a' }, { text: 'i', label: 'i' }, { text: 'oai', label: 'oai' }], script: 'o - ai - oai' },
+    oay: { steps: [{ text: 'o', label: 'o' }, { text: 'a', label: 'a' }, { text: 'i dài', label: 'y' }, { text: 'oay', label: 'oay' }], script: 'o - ay - oay' },
+    uôi: { steps: [{ text: 'u', label: 'u' }, { text: 'ô', label: 'ô' }, { text: 'i', label: 'i' }, { text: 'uôi', label: 'uôi' }], script: 'u - ô - i - uôi' },
+    ươi: { steps: [{ text: 'ư', label: 'ư' }, { text: 'ơ', label: 'ơ' }, { text: 'i', label: 'i' }, { text: 'ươi', label: 'ươi' }], script: 'ư - ơ - i - ươi' },
+    uây: { steps: [{ text: 'u', label: 'u' }, { text: 'ớ', label: 'â' }, { text: 'i dài', label: 'y' }, { text: 'uây', label: 'uây' }], script: 'u - ây - uây' },
+    iêu: { steps: [{ text: 'i', label: 'i' }, { text: 'ê', label: 'ê' }, { text: 'u', label: 'u' }, { text: 'iêu', label: 'iêu' }], script: 'i - ê - u - iêu' },
+    yêu: { steps: [{ text: 'i dài', label: 'y' }, { text: 'ê', label: 'ê' }, { text: 'u', label: 'u' }, { text: 'yêu', label: 'yêu' }], script: 'y - ê - u - yêu' },
+    oa: { steps: [{ text: 'o', label: 'o' }, { text: 'a', label: 'a' }, { text: 'oa', label: 'oa' }], script: 'o - a - oa' },
+    oe: { steps: [{ text: 'o', label: 'o' }, { text: 'e', label: 'e' }, { text: 'oe', label: 'oe' }], script: 'o - e - oe' },
+    uê: { steps: [{ text: 'u', label: 'u' }, { text: 'ê', label: 'ê' }, { text: 'uê', label: 'uê' }], script: 'u - ê - uê' },
+    uơ: { steps: [{ text: 'u', label: 'u' }, { text: 'ơ', label: 'ơ' }, { text: 'uơ', label: 'uơ' }], script: 'u - ơ - uơ' },
+    uy: { steps: [{ text: 'u', label: 'u' }, { text: 'i dài', label: 'y' }, { text: 'uy', label: 'uy' }], script: 'u - y - uy' },
+    uô: { steps: [{ text: 'u', label: 'u' }, { text: 'ô', label: 'ô' }, { text: 'uô', label: 'uô' }], script: 'u - ô - uô' },
+    ươ: { steps: [{ text: 'ư', label: 'ư' }, { text: 'ơ', label: 'ơ' }, { text: 'ươ', label: 'ươ' }], script: 'ư - ơ - ươ' },
+    oeo: { steps: [{ text: 'o', label: 'o' }, { text: 'e', label: 'e' }, { text: 'o', label: 'o' }, { text: 'oeo', label: 'oeo' }], script: 'o - eo - oeo' },
   };
 
   let spellingScript = '';
@@ -342,9 +632,14 @@ export function analyzeSyllable(rawWord: string): SpellingAnalysis {
         spellingScript = clean;
       }
     }
+  } else if (onset && !rime) {
+    // Trường hợp âm đầu đứng một mình (ch, th, p, nh, kh, ph, tr, qu, gi, gh, ng, ngh...)
+    steps.push({ text: onsetSound, label: onset });
+    spellingScript = onsetSound;
   } else {
-    steps.push({ text: clean, label: clean });
-    spellingScript = clean;
+    const sound = STANDALONE_LETTER_SOUNDS[clean] || clean;
+    steps.push({ text: sound, label: clean });
+    spellingScript = sound;
   }
 
   return {
@@ -561,7 +856,8 @@ export async function fetchTTSAudio(
 ): Promise<string | null> {
   const trimmed = text.trim();
   if (!trimmed) return null;
-  const cacheKey = `${trimmed}_${style || 'default'}`;
+  const cleaned = cleanTextForVietnameseSpeech(trimmed);
+  const cacheKey = `${cleaned}_${style || 'default'}`;
   if (clientAudioCache.has(cacheKey)) {
     return clientAudioCache.get(cacheKey)!;
   }
@@ -575,7 +871,7 @@ export async function fetchTTSAudio(
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        text: trimmed,
+        text: cleaned,
         style:
           style ||
           'A lively, clear, warm Vietnamese primary school teacher pronouncing Vietnamese letters and phonics at an active, brisk and encouraging pace for first grade children. Ensure bé has an open e sound, bê has a close ê sound, and ay has an ay sound distinct from ai.',
