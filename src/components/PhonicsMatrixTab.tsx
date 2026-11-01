@@ -43,7 +43,7 @@ export const PhonicsMatrixTab: React.FC<PhonicsMatrixTabProps> = ({
   const [currentSpellStep, setCurrentSpellStep] = useState<string | null>(null);
   const [playingSentence, setPlayingSentence] = useState<string | null>(null);
 
-  const effectiveRate = slowRate ? 0.88 : 0.98;
+  const effectiveRate = slowRate ? 0.95 : 1.1;
 
   // Lấy Phần học hiện tại
   const currentPart: LessonPart =
@@ -125,7 +125,7 @@ export const PhonicsMatrixTab: React.FC<PhonicsMatrixTabProps> = ({
 
     setPlayingSentence(sentence);
     await speakAI(sentence, {
-      rate: effectiveRate * 0.94,
+      rate: effectiveRate,
       onEnd: () => setPlayingSentence(null),
     });
     onGainStar();
@@ -140,7 +140,7 @@ export const PhonicsMatrixTab: React.FC<PhonicsMatrixTabProps> = ({
 
     setPlayingSentence(text);
     await speakAI(text, {
-      rate: effectiveRate * 0.92,
+      rate: effectiveRate,
       onEnd: () => setPlayingSentence(null),
     });
     onGainStar();

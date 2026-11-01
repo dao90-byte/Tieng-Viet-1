@@ -297,8 +297,8 @@ export const CONSONANT_LESSONS: ConsonantPhonicsLesson[] = [
       sceneCaption: 'Bò bê có bó cỏ',
       sentences: [
         "Cô có cờ, bé có bi.",
-        "Bố bế cả Bi và Bo."
-],
+        "Bố bế cả Bi, cả Bo."
+      ],
     },
 
   },
@@ -650,8 +650,8 @@ export const CONSONANT_LESSONS: ConsonantPhonicsLesson[] = [
       sceneCaption: 'Bé vẽ chú khỉ',
       sentences: [
         "Bé khệ nệ bê bó cỏ về cho bò.",
-        "Chị Nga kể cho bé nghe về kì nghỉ hè ở Sa Pa."
-],
+        "Chị Nga cho bé rổ khế to."
+      ],
     },
 
   },
@@ -871,9 +871,9 @@ export const CONSONANT_LESSONS: ConsonantPhonicsLesson[] = [
       practiceWords: ["nghỉ hè","nghi ngờ","nghé tơ"],
       sceneCaption: 'Ở bờ đê có chú nghé tơ',
       sentences: [
-        "Bố mẹ cho bé và chị Nga đi nghỉ hè ở Sa Pa.",
+        "Bố mẹ cho bé và chị Nga đi nghỉ hè ở hồ Ba Bể.",
         "Bà đi chợ về có giỏ cá, lá ngổ, củ sả, củ nghệ và có cả giò chả."
-],
+      ],
     },
 
   },
@@ -941,29 +941,30 @@ export const CONSONANT_LESSONS: ConsonantPhonicsLesson[] = [
     readingData: {
       illustratedWords: [
         {
-                "word": "pin",
-                "image": "🔋",
-                "spellingSteps": [
-                        "pờ - in - pin",
-                        "pin"
-                ]
+          "word": "pa-nô",
+          "image": "🪧",
+          "spellingSteps": [
+            "pờ - a - pa",
+            "nờ - ô - nô",
+            "pa-nô"
+          ]
         },
         {
-                "word": "pa tê",
-                "image": "🥪",
-                "spellingSteps": [
-                        "pờ - a - pa",
-                        "tờ - ê - tê",
-                        "pa tê"
-                ]
+          "word": "pa tê",
+          "image": "🥪",
+          "spellingSteps": [
+            "pờ - a - pa",
+            "tờ - ê - tê",
+            "pa tê"
+          ]
         }
-],
-      practiceWords: ["pi a nô","pa-nô","pô xe","pi-a-ma"],
+      ],
+      practiceWords: ["pi a nô", "pa-nô", "pô xe", "Sa Pa"],
       sceneCaption: 'Pí pa pí pô, bé đi ô tô',
       sentences: [
         "Pí pa pí pô, bé đi ô tô.",
-        "Sa Pa."
-],
+        "Bé và mẹ đi Sa Pa."
+      ],
     },
 
   },
@@ -1233,10 +1234,10 @@ export const CONSONANT_LESSONS: ConsonantPhonicsLesson[] = [
       practiceWords: ["thơ ca","thủ thỉ","lá thư","sở thú"],
       sceneCaption: 'Bé đi thi vẽ',
       sentences: [
-        "Nghỉ hè, mẹ cho bé đi sở thú ở thủ đô.",
+        "Mẹ cho bé đi sở thú ở thủ đô.",
         "Ở sở thú có sư tử, có hổ và có cả khỉ.",
         "Mẹ đi xa về, bé thủ thỉ: Mẹ à, bé nhớ mẹ!"
-],
+      ],
     },
 
   },
@@ -2140,7 +2141,7 @@ export const RIME_READING_LESSONS: RimeReadingLesson[] = [
     ],
     "passage": {
       "title": "Chú cún con",
-      "text": "Bé có chú cún con be bé. Chú cún con theo bé ra bồn hoa. Bé lớn khôn, biết lo cho cún con. Cún con vui vẻ đi theo bé."
+      "text": "Bé có chú cún con be bé. Chú cún con theo bé ra bồn hoa. Bé lớn khôn, luôn lo cho cún con. Cún con vui vẻ đi theo bé."
     }
   },
   {
@@ -2151,17 +2152,17 @@ export const RIME_READING_LESSONS: RimeReadingLesson[] = [
     "illustratedWords": [
       { "word": "con giun", "image": "🪱" },
       { "word": "áo thun", "image": "👕" },
-      { "word": "bát bún", "image": "🍜" },
+      { "word": "sợi bún", "image": "🍜" },
       { "word": "vun xới", "image": "🌱" }
     ],
     "practiceWords": [
-      "con giun", "áo thun", "dây thun", "bát bún",
-      "phun nước", "vun xới", "run run", "bún riêu"
+      "con giun", "áo thun", "dây thun", "sợi bún",
+      "mưa phùn", "vun xới", "run run", "bún riêu"
     ],
     "sentences": [
       "Mẹ mua cho bé cái áo thun mới.",
       "Chú giun bò ở sau nhà.",
-      "Bố tưới cây hoa bằng bình phun nước."
+      "Mẹ mua bún riêu cho cả nhà."
     ]
   },
   {
@@ -2180,13 +2181,13 @@ export const RIME_READING_LESSONS: RimeReadingLesson[] = [
       "tơ tằm", "mầm cây", "can đảm", "chầm chậm", "củ sắn"
     ],
     "sentences": [
-      "Bé chăm chỉ tập đọc mỗi ngày.",
+      "Bé chăm chỉ rèn chữ mỗi ngày.",
       "Bố pha ấm trà thơm mời bà.",
       "Cây nấm nhỏ nở sau cơn mưa."
     ],
     "passage": {
-      "title": "Bé chăm chỉ",
-      "text": "Mỗi buổi tối, bé ngồi vào bàn học bài. Bé chăm chỉ nắn nót viết từng nét chữ. Mẹ khen bé chăm ngoan, biết vâng lời bố mẹ."
+      "title": "Bé chăm ngoan",
+      "text": "Mỗi ban mai, bé ra sân chơi cùng bà và mẹ. Bé chăm chỉ tưới mầm cây nhỏ sau nhà. Mẹ khen bé chăm ngoan, luôn nghe lời bố mẹ. Cả nhà vui vẻ, yêu thương bé nhiều."
     }
   },
   {
@@ -2523,7 +2524,7 @@ export const RIME_READING_LESSONS: RimeReadingLesson[] = [
     "sentences": [
       "Bà mua dưa lê chia cho cả nhà.",
       "Mẹ ru bé ngủ trưa ở nhà.",
-      "Bố mẹ tươi cười chào bé đi học về."
+      "Bố mẹ tươi cười chào bé đi chơi về."
     ]
   },
   {

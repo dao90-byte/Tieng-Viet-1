@@ -499,7 +499,7 @@ export function cleanTextForVietnameseSpeech(input: string): string {
 
 export function speakWebSpeech(
   text: string,
-  rate: number = 0.95,
+  rate: number = 1.08,
   voiceURI?: string | null
 ): Promise<void> {
   return new Promise((resolve) => {
@@ -513,7 +513,7 @@ export function speakWebSpeech(
     const utterance = new SpeechSynthesisUtterance(spokenText);
     utterance.lang = 'vi-VN';
     utterance.rate = rate;
-    utterance.pitch = 1.06;
+    utterance.pitch = 1.0;
 
     let voices = updateVoicesList();
 
@@ -578,7 +578,7 @@ export async function fetchTTSAudio(
         text: trimmed,
         style:
           style ||
-          'A gentle, warm Vietnamese primary school teacher pronouncing Vietnamese letters and phonics clearly, accurately and slowly for first grade children. Ensure bé has an open e sound, bê has a close ê sound, and ay has an ay sound distinct from ai.',
+          'A lively, clear, warm Vietnamese primary school teacher pronouncing Vietnamese letters and phonics at an active, brisk and encouraging pace for first grade children. Ensure bé has an open e sound, bê has a close ê sound, and ay has an ay sound distinct from ai.',
       }),
     });
 
@@ -647,10 +647,12 @@ export async function speakAI(
 /**
  * Phát âm thanh từ Base64 WAV
  */
-function playAudioBase64(base64: string): Promise<void> {
+function playAudioBase64(base64: string, rate: number = 1.14): Promise<void> {
   return new Promise((resolve, reject) => {
     try {
-      const audio = new Audio(`data:audio/wav;base64,${base64}`);
+      const mime = base64.startsWith('UklGR') ? 'audio/wav' : 'audio/mpeg';
+      const audio = new Audio(`data:${mime};base64,${base64}`);
+      audio.playbackRate = rate;
       currentAudio = audio;
       audio.onended = () => {
         currentAudio = null;
@@ -700,14 +702,15 @@ export async function spellOutSyllable(
   const spellingText = analysis.spellingScript;
   const audioBase64 = await fetchTTSAudio(
     spellingText,
-    `A gentle Vietnamese primary school teacher spelling out letters slowly, rhythmically and clearly for a first grader: ${spellingText}. Ensure bé has an open e sound, bê has a close ê sound, and ay has an ay sound distinct from ai.`
+    `A lively Vietnamese primary school teacher spelling out letters at an active, brisk, clear rhythm for a first grader: ${spellingText}. Ensure bé has an open e sound, bê has a close ê sound, and ay has an ay sound distinct from ai.`
   );
 
   if (audioBase64) {
     onStepChange?.({ text: spellingText, label: spellingText }, 0);
     const stepCount = analysis.steps.length;
     let stepIdx = 0;
-    const intervalTime = Math.max(350, Math.min(800, 2200 / (stepCount || 1)));
+    // Nhịp bước đánh vần nhanh, dứt khoát và hoạt bát hơn (180ms - 380ms)
+    const intervalTime = Math.max(180, Math.min(380, 1400 / (stepCount || 1)));
     const interval = setInterval(() => {
       if (stepIdx < stepCount) {
         onStepChange?.(analysis.steps[stepIdx], stepIdx);
@@ -715,7 +718,7 @@ export async function spellOutSyllable(
       }
     }, intervalTime);
     try {
-      await playAudioBase64(audioBase64);
+      await playAudioBase64(audioBase64, 1.14);
     } finally {
       clearInterval(interval);
       onStepChange?.(analysis.steps[stepCount - 1], stepCount - 1);
@@ -727,7 +730,7 @@ export async function spellOutSyllable(
   for (let i = 0; i < analysis.steps.length; i++) {
     const step = analysis.steps[i];
     onStepChange?.(step, i);
-    await speakWebSpeech(step.text, 0.95, preferredReadingVoiceUri);
-    await new Promise((r) => setTimeout(r, 120));
+    await speakWebSpeech(step.text, 1.08, preferredReadingVoiceUri);
+    await new Promise((r) => setTimeout(r, 90));
   }
 }
