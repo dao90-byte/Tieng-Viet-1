@@ -99,6 +99,7 @@ const PHONIC_SOUND_MAP: Record<string, string> = {
   ơ: 'ơ',
   u: 'u',
   ư: 'ư',
+  nghỉ: 'nghỉ',
 };
 
 function cleanServerText(input: string): string {
@@ -114,12 +115,15 @@ function cleanServerText(input: string): string {
     .replace(/\b[Cc]hữ\s+q\b/g, 'Chữ qui')
     .replace(/\b[Cc]hữ\s+Q\b/g, 'Chữ qui')
     .replace(/\b[Cc]hữ\s+y\b/g, 'Chữ i dài')
-    .replace(/\b[Cc]hữ\s+Y\b/g, 'Chữ i dài');
+    .replace(/\b[Cc]hữ\s+Y\b/g, 'Chữ i dài')
+    .replace(/\b[Ââ]m\s+p\b/g, 'Âm pờ')
+    .replace(/\b[Ââ]m\s+P\b/g, 'Âm pờ');
 
-  // Chuyển dấu gạch nối, chấm tròn thành dấu phẩy và khoảng trắng ngắt nhịp tự nhiên
-  clean = clean.replace(/\s*[-–—•·/]\s*/g, ', ');
+  // Chuẩn hóa dấu gạch ngang phân tách nhịp đánh vần: giữ nguyên dấu gạch ngang có khoảng trắng
+  // Tuyệt đối không thay thành dấu phẩy để tránh Google TTS tách vế đọc nhầm sang tiếng Anh
+  clean = clean.replace(/\s*[-–—]\s*/g, ' - ');
   clean = clean.replace(/([a-zA-ZÀ-ỹ]+)-([a-zA-ZÀ-ỹ]+)/g, '$1 $2');
-  clean = clean.replace(/^[•\-\*]\s*/, '').replace(/["“”«»]/g, '');
+  clean = clean.replace(/^[•\*]\s*/, '').replace(/["“”«»]/g, '');
   return clean;
 }
 
@@ -147,13 +151,6 @@ app.post('/api/tts', async (req, res) => {
       return res.json({
         audioBase64: audioCache.get(rawKey),
         cached: true,
-      });
-    }
-
-    if (!ai) {
-      return res.status(503).json({
-        error: 'Gemini API not configured. Using client-side speech synthesis.',
-        fallback: true,
       });
     }
 

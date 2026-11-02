@@ -9,6 +9,24 @@ let currentAudio: HTMLAudioElement | null = null;
 let ttsApiDisabledUntil = 0;
 let preferredReadingVoiceUri: string | null = null;
 
+// Preload static TTS cache on static environments like GitHub Pages
+if (typeof window !== 'undefined') {
+  const baseUrl = import.meta.env.BASE_URL || './';
+  const cachePath = baseUrl.endsWith('/') ? `${baseUrl}tts-cache.json` : `${baseUrl}/tts-cache.json`;
+  fetch(cachePath)
+    .then((r) => (r.ok ? r.json() : null))
+    .then((data) => {
+      if (data && typeof data === 'object') {
+        for (const [k, v] of Object.entries(data)) {
+          if (typeof v === 'string') {
+            clientAudioCache.set(k, v);
+          }
+        }
+      }
+    })
+    .catch(() => {});
+}
+
 export interface SpellingAnalysis {
   word: string;
   onset: string; // Phụ âm đầu (ví dụ: b, ch, ngh)
@@ -415,8 +433,7 @@ export function analyzeSyllable(rawWord: string): SpellingAnalysis {
     oac: {
       steps: [
         { text: 'o', label: 'o' },
-        { text: 'a', label: 'a' },
-        { text: 'cờ', label: 'c' },
+        { text: 'ac', label: 'ac' },
         { text: 'oac', label: 'oac' },
       ],
       script: 'o - ac - oac',
@@ -424,8 +441,7 @@ export function analyzeSyllable(rawWord: string): SpellingAnalysis {
     oăc: {
       steps: [
         { text: 'o', label: 'o' },
-        { text: 'á', label: 'ă' },
-        { text: 'cờ', label: 'c' },
+        { text: 'ăc', label: 'ăc' },
         { text: 'oăc', label: 'oăc' },
       ],
       script: 'o - ăc - oăc',
@@ -457,8 +473,7 @@ export function analyzeSyllable(rawWord: string): SpellingAnalysis {
     oan: {
       steps: [
         { text: 'o', label: 'o' },
-        { text: 'a', label: 'a' },
-        { text: 'nờ', label: 'n' },
+        { text: 'an', label: 'an' },
         { text: 'oan', label: 'oan' },
       ],
       script: 'o - an - oan',
@@ -466,8 +481,7 @@ export function analyzeSyllable(rawWord: string): SpellingAnalysis {
     oăn: {
       steps: [
         { text: 'o', label: 'o' },
-        { text: 'á', label: 'ă' },
-        { text: 'nờ', label: 'n' },
+        { text: 'ăn', label: 'ăn' },
         { text: 'oăn', label: 'oăn' },
       ],
       script: 'o - ăn - oăn',
@@ -475,8 +489,7 @@ export function analyzeSyllable(rawWord: string): SpellingAnalysis {
     oat: {
       steps: [
         { text: 'o', label: 'o' },
-        { text: 'a', label: 'a' },
-        { text: 'tờ', label: 't' },
+        { text: 'at', label: 'at' },
         { text: 'oat', label: 'oat' },
       ],
       script: 'o - at - oat',
@@ -484,8 +497,7 @@ export function analyzeSyllable(rawWord: string): SpellingAnalysis {
     oăt: {
       steps: [
         { text: 'o', label: 'o' },
-        { text: 'á', label: 'ă' },
-        { text: 'tờ', label: 't' },
+        { text: 'ăt', label: 'ăt' },
         { text: 'oăt', label: 'oăt' },
       ],
       script: 'o - ăt - oăt',
@@ -522,8 +534,8 @@ export function analyzeSyllable(rawWord: string): SpellingAnalysis {
     },
     // Các vần bổ sung trong sách giáo khoa
     ươu: {
-      steps: [{ text: 'ư', label: 'ư' }, { text: 'ơ', label: 'ơ' }, { text: 'u', label: 'u' }, { text: 'ươu', label: 'ươu' }],
-      script: 'ư - ơ - u - ươu',
+      steps: [{ text: 'ươ', label: 'ươ' }, { text: 'u', label: 'u' }, { text: 'ươu', label: 'ươu' }],
+      script: 'ươ - u - ươu',
     },
     ăt: { steps: [{ text: 'á', label: 'ă' }, { text: 'tờ', label: 't' }, { text: 'ăt', label: 'ăt' }], script: 'ă - tờ - ăt' },
     ât: { steps: [{ text: 'ớ', label: 'â' }, { text: 'tờ', label: 't' }, { text: 'ât', label: 'ât' }], script: 'â - tờ - ât' },
@@ -593,7 +605,7 @@ export function analyzeSyllable(rawWord: string): SpellingAnalysis {
     uy: { steps: [{ text: 'u', label: 'u' }, { text: 'i dài', label: 'y' }, { text: 'uy', label: 'uy' }], script: 'u - y - uy' },
     uô: { steps: [{ text: 'u', label: 'u' }, { text: 'ô', label: 'ô' }, { text: 'uô', label: 'uô' }], script: 'u - ô - uô' },
     ươ: { steps: [{ text: 'ư', label: 'ư' }, { text: 'ơ', label: 'ơ' }, { text: 'ươ', label: 'ươ' }], script: 'ư - ơ - ươ' },
-    oeo: { steps: [{ text: 'o', label: 'o' }, { text: 'e', label: 'e' }, { text: 'o', label: 'o' }, { text: 'oeo', label: 'oeo' }], script: 'o - eo - oeo' },
+    oeo: { steps: [{ text: 'o', label: 'o' }, { text: 'eo', label: 'eo' }, { text: 'oeo', label: 'oeo' }], script: 'o - eo - oeo' },
   };
 
   let spellingScript = '';
@@ -751,6 +763,7 @@ const STANDALONE_LETTER_SOUNDS: Record<string, string> = {
   ơ: 'ơ',
   u: 'u',
   ư: 'ư',
+  nghỉ: 'nghỉ',
 };
 
 export function cleanTextForVietnameseSpeech(input: string): string {
@@ -778,16 +791,16 @@ export function cleanTextForVietnameseSpeech(input: string): string {
     .replace(/\b[Ââ]m\s+y\b/g, 'Âm i dài')
     .replace(/\b[Ââ]m\s+Y\b/g, 'Âm i dài');
 
-  // 3. Nếu là danh sách các vần/chữ cái ghép cách nhau bởi gạch nối, chấm tròn, dấu phẩy (ví dụ: "ay - ây", "an · ăn · ân", "ua - ưa", "oi - ai")
-  // Chuyển thành dấu phẩy và khoảng trắng để giọng đọc phát âm từng vần ngắt nghỉ tự nhiên, tuyệt đối không đọc từ "gạch ngang" hay "chấm"
-  clean = clean.replace(/\s*[-–—•·/]\s*/g, ', ');
+  // 3. Chuẩn hóa dấu gạch ngang phân tách nhịp đánh vần, không chuyển thành dấu phẩy
+  clean = clean.replace(/\s*[-–—]\s*/g, ' - ');
+  clean = clean.replace(/\s*[•·/]\s*/g, ' ');
 
   // 4. Chuẩn hóa các từ ghép có gạch nối để phát âm liền mạch (ví dụ pa-nô -> pa nô, pi-a-ma -> pi a ma)
   clean = clean.replace(/([a-zA-ZÀ-ỹ]+)-([a-zA-ZÀ-ỹ]+)/g, '$1 $2');
   clean = clean.replace(/([a-zA-ZÀ-ỹ]+)-([a-zA-ZÀ-ỹ]+)/g, '$1 $2');
 
   // 5. Loại bỏ các ký tự thừa làm đứt quãng giọng đọc
-  clean = clean.replace(/^[•\-\*]\s*/, '').replace(/["“”«»]/g, '');
+  clean = clean.replace(/^[•\*]\s*/, '').replace(/["“”«»]/g, '');
 
   return clean;
 }
@@ -931,13 +944,48 @@ export async function speakAI(
     }
   }
 
-  // 2. Fallback trình duyệt Web Speech API
+  // 2. Dự phòng âm thanh trực tiếp cho môi trường tĩnh (GitHub Pages)
+  try {
+    const cleaned = cleanTextForVietnameseSpeech(trimmed);
+    const directUrl = `https://translate.google.com/translate_tts?ie=UTF-8&tl=vi&client=tw-ob&q=${encodeURIComponent(cleaned)}`;
+    await playAudioUrl(directUrl, options.rate ? options.rate * 1.05 : 1.08);
+    options.onEnd?.();
+    return;
+  } catch {
+    // Fallback nếu offline hoặc không có mạng
+  }
+
+  // 3. Fallback cuối cùng: Trình duyệt Web Speech API
   await speakWebSpeech(
     trimmed,
     options.rate || 0.95,
     options.voiceURI || preferredReadingVoiceUri
   );
   options.onEnd?.();
+}
+
+/**
+ * Phát âm thanh trực tiếp từ URL Audio
+ */
+function playAudioUrl(url: string, rate: number = 1.08): Promise<void> {
+  return new Promise((resolve, reject) => {
+    try {
+      const audio = new Audio(url);
+      audio.playbackRate = rate;
+      currentAudio = audio;
+      audio.onended = () => {
+        currentAudio = null;
+        resolve();
+      };
+      audio.onerror = (e) => {
+        currentAudio = null;
+        reject(e);
+      };
+      audio.play().catch(reject);
+    } catch (e) {
+      reject(e);
+    }
+  });
 }
 
 /**
@@ -1020,6 +1068,30 @@ export async function spellOutSyllable(
       onStepChange?.(analysis.steps[stepCount - 1], stepCount - 1);
     }
     return;
+  }
+
+  // 1.5 Dự phòng phát trực tiếp câu đánh vần từ URL âm thanh Google TTS cho môi trường tĩnh (GitHub Pages)
+  try {
+    const directUrl = `https://translate.google.com/translate_tts?ie=UTF-8&tl=vi&client=tw-ob&q=${encodeURIComponent(spellingText)}`;
+    onStepChange?.({ text: spellingText, label: spellingText }, 0);
+    const stepCount = analysis.steps.length;
+    let stepIdx = 0;
+    const intervalTime = Math.max(180, Math.min(380, 1400 / (stepCount || 1)));
+    const interval = setInterval(() => {
+      if (stepIdx < stepCount) {
+        onStepChange?.(analysis.steps[stepIdx], stepIdx);
+        stepIdx++;
+      }
+    }, intervalTime);
+    try {
+      await playAudioUrl(directUrl, 1.1);
+      return;
+    } finally {
+      clearInterval(interval);
+      onStepChange?.(analysis.steps[stepCount - 1], stepCount - 1);
+    }
+  } catch {
+    // Fallback sang Web Speech API từng bước
   }
 
   // 2. Web Speech fallback

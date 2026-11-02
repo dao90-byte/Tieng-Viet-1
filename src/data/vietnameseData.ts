@@ -2515,17 +2515,21 @@ export const RIME_READING_LESSONS: RimeReadingLesson[] = [
     "title": "uô - ươ",
     "bookPage": 118,
     "illustratedWords": [
-      { "word": "quả dưa", "image": "🍈" },
+      { "word": "ngọn đuốc", "image": "🔥" },
+      { "word": "chú hươu", "image": "🦌" },
       { "word": "bờ suối", "image": "🏞️" },
-      { "word": "ruộng lúa", "image": "🌾" },
-      { "word": "nụ cười", "image": "😊" }
+      { "word": "thước kẻ", "image": "📏" }
     ],
-    "practiceWords": ["cà chua", "quả dưa", "dưa lê", "tươi cười", "bờ suối"],
+    "practiceWords": ["ngọn đuốc", "bó đuốc", "chú hươu", "thước kẻ", "bờ suối", "quả bưởi", "nải chuối", "vườn hoa"],
     "sentences": [
-      "Bà mua dưa lê chia cho cả nhà.",
-      "Mẹ ru bé ngủ trưa ở nhà.",
-      "Bố mẹ tươi cười chào bé đi chơi về."
-    ]
+      "Mẹ mua nải chuối và quả bưởi to.",
+      "Bé cầm thước kẻ vẽ hình ngôi nhà.",
+      "Bên bờ suối mát, chú hươu sao thong thả đi dạo."
+    ],
+    "passage": {
+      "title": "Buổi trưa ở quê",
+      "text": "Buổi trưa hè ở quê thật êm đềm. Gió mát thổi qua vườn hoa ngát hương. Bên bờ suối, chú hươu sao tung tăng vui đùa. Bé ngồi dưới gốc cây bưởi, tươi cười ăn chuối cùng mẹ."
+    }
   },
   {
     "id": "oeo",
@@ -3061,7 +3065,7 @@ export const LESSON_PARTS: LessonPart[] = [
       { id: 'oa_oe', type: 'rime', label: 'oa - oe', subLabel: 'Bông hoa', pageNumber: 115 },
       { id: 'ue_uo', type: 'rime', label: 'uê - uơ', subLabel: 'Hoa huệ', pageNumber: 116 },
       { id: 'uy_uy', type: 'rime', label: 'uy - uya', subLabel: 'Tàu thủy', pageNumber: 117 },
-      { id: 'uo_uo2', type: 'rime', label: 'uô - ươ', subLabel: 'Ruộng lúa', pageNumber: 118 },
+      { id: 'uo_uo2', type: 'rime', label: 'uô - ươ', subLabel: 'Bó đuốc, chú hươu', pageNumber: 118 },
       { id: 'oeo', type: 'rime', label: 'oeo - oay', subLabel: 'Ngoằn ngoèo', pageNumber: 119 },
       { id: 'on_tieu_hoc', type: 'rime', label: 'ia · ua · ưa', subLabel: 'Ôn tập 1', pageNumber: 120 },
       { id: 'on_nguyen_am', type: 'rime', label: 'ai · ay · ây', subLabel: 'Ôn tập 2', pageNumber: 121 },
