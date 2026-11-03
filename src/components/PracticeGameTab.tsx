@@ -5,14 +5,20 @@
 
 import React, { useState } from 'react';
 import confetti from 'canvas-confetti';
-import { Sparkles, Volume2, Award, RotateCcw, CheckCircle, HelpCircle } from 'lucide-react';
+import { Volume2, Trophy, Star } from 'lucide-react';
 import { speakAI } from '../services/speechService';
+import { WritingCanvasGame } from './games/WritingCanvasGame';
+import { PhonicsBuilderGame } from './games/PhonicsBuilderGame';
+import { TrainRimeGame } from './games/TrainRimeGame';
+import { MatchingPhonicsGame } from './games/MatchingPhonicsGame';
 
 interface PracticeGameTabProps {
   stars: number;
   onAddStar: () => void;
   slowRate: boolean;
 }
+
+type GameMode = 'writing' | 'phonics_builder' | 'train_rime' | 'matching' | 'spell_quiz' | 'listen_quiz';
 
 interface SpellingQuiz {
   image: string;
@@ -154,7 +160,7 @@ export const PracticeGameTab: React.FC<PracticeGameTabProps> = ({
   onAddStar,
   slowRate,
 }) => {
-  const [activeGame, setActiveGame] = useState<'spell_quiz' | 'listen_quiz'>('spell_quiz');
+  const [activeGame, setActiveGame] = useState<GameMode>('writing');
 
   // Spelling Quiz State
   const [spellIndex, setSpellIndex] = useState(0);
@@ -176,7 +182,7 @@ export const PracticeGameTab: React.FC<PracticeGameTabProps> = ({
     });
   };
 
-  // Handle Answer in Game 1
+  // Handle Answer in Spell Quiz
   const handleSelectSpellOption = async (option: string) => {
     if (spellFeedback !== 'idle') return;
 
@@ -184,7 +190,6 @@ export const PracticeGameTab: React.FC<PracticeGameTabProps> = ({
       setSpellFeedback('correct');
       triggerConfetti();
       onAddStar();
-      // Chỉ phát âm DUY NHẤT từ vựng vừa ghép đúng
       await speakAI(currentSpellQuiz.word, {
         rate: slowRate ? 0.75 : 0.85,
       });
@@ -198,9 +203,8 @@ export const PracticeGameTab: React.FC<PracticeGameTabProps> = ({
     }
   };
 
-  // Handle Answer in Game 2
+  // Handle Answer in Listen Quiz
   const handlePlayListeningAudio = async () => {
-    // Chỉ phát âm DUY NHẤT từ vựng cần nghe
     await speakAI(currentListenQuiz.spokenAudio, {
       rate: slowRate ? 0.75 : 0.85,
     });
@@ -213,7 +217,6 @@ export const PracticeGameTab: React.FC<PracticeGameTabProps> = ({
       setListenFeedback('correct');
       triggerConfetti();
       onAddStar();
-      // Chỉ phát âm DUY NHẤT từ vựng đúng
       await speakAI(currentListenQuiz.targetWord, {
         rate: slowRate ? 0.75 : 0.85,
       });
@@ -228,53 +231,129 @@ export const PracticeGameTab: React.FC<PracticeGameTabProps> = ({
   };
 
   return (
-    <div className="space-y-8 pb-16">
-      {/* Game Selector Bar */}
-      <div className="bg-white p-4 rounded-3xl border border-slate-200 shadow-xs flex flex-col sm:flex-row items-center justify-between gap-4">
-        <div className="flex items-center gap-2">
+    <div className="space-y-6 pb-16">
+      {/* 1. Header Bar: Game Switcher & Star Counters */}
+      <div className="bg-white p-4 rounded-3xl border border-slate-200 shadow-xs flex flex-col xl:flex-row items-center justify-between gap-4">
+        {/* Segmented Game Switcher */}
+        <div className="flex flex-wrap items-center gap-1.5 p-1 bg-slate-100 rounded-2xl w-full xl:w-auto">
+          <button
+            onClick={() => setActiveGame('writing')}
+            className={`px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all flex items-center gap-1.5 ${
+              activeGame === 'writing'
+                ? 'bg-white text-emerald-800 shadow-xs'
+                : 'text-slate-600 hover:text-slate-900'
+            }`}
+          >
+            <span>✍️</span>
+            <span>Bé Luyện Viết</span>
+          </button>
+
+          <button
+            onClick={() => setActiveGame('phonics_builder')}
+            className={`px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all flex items-center gap-1.5 ${
+              activeGame === 'phonics_builder'
+                ? 'bg-white text-amber-800 shadow-xs'
+                : 'text-slate-600 hover:text-slate-900'
+            }`}
+          >
+            <span>🧪</span>
+            <span>Xưởng Ghép Tiếng</span>
+          </button>
+
+          <button
+            onClick={() => setActiveGame('train_rime')}
+            className={`px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all flex items-center gap-1.5 ${
+              activeGame === 'train_rime'
+                ? 'bg-white text-sky-800 shadow-xs'
+                : 'text-slate-600 hover:text-slate-900'
+            }`}
+          >
+            <span>🚂</span>
+            <span>Đoàn Tàu Ghép Vần</span>
+          </button>
+
+          <button
+            onClick={() => setActiveGame('matching')}
+            className={`px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all flex items-center gap-1.5 ${
+              activeGame === 'matching'
+                ? 'bg-white text-indigo-800 shadow-xs'
+                : 'text-slate-600 hover:text-slate-900'
+            }`}
+          >
+            <span>🧩</span>
+            <span>Nối Âm Vần</span>
+          </button>
+
           <button
             onClick={() => setActiveGame('spell_quiz')}
-            className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all ${
+            className={`px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all flex items-center gap-1.5 ${
               activeGame === 'spell_quiz'
-                ? 'bg-rose-500 text-white shadow-xs'
-                : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
+                ? 'bg-white text-rose-800 shadow-xs'
+                : 'text-slate-600 hover:text-slate-900'
             }`}
           >
-            Trò Chơi 1: Bé Ghép Chữ Đúng Tranh
+            <span>🎯</span>
+            <span>Ghép Tranh</span>
           </button>
+
           <button
             onClick={() => setActiveGame('listen_quiz')}
-            className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all ${
+            className={`px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all flex items-center gap-1.5 ${
               activeGame === 'listen_quiz'
-                ? 'bg-rose-500 text-white shadow-xs'
-                : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
+                ? 'bg-white text-violet-800 shadow-xs'
+                : 'text-slate-600 hover:text-slate-900'
             }`}
           >
-            Trò Chơi 2: Ai Tai Tinh Hơn?
+            <span>👂</span>
+            <span>Ai Tai Tinh Hơn?</span>
           </button>
         </div>
 
-        {/* Badges Earned */}
-        <div className="flex items-center gap-2">
-          <span className="text-xs font-semibold text-slate-500">Huy hiệu:</span>
+        {/* Stars and Rewards Info (Zero-pill typography) */}
+        <div className="flex items-center gap-3 text-xs text-slate-600 shrink-0">
+          <div className="flex items-center gap-1 text-amber-600 font-black text-sm">
+            <Star className="w-4 h-4 fill-amber-400 text-amber-500" />
+            <span>{stars} Sao</span>
+          </div>
+          <span aria-hidden="true" className="text-slate-300">·</span>
           {stars >= 5 ? (
-            <span className="px-2.5 py-1 rounded-xl bg-amber-100 text-amber-800 text-xs font-bold border border-amber-300 flex items-center gap-1">
+            <span className="font-bold text-amber-700 flex items-center gap-1">
               ⭐ Bé Chăm Chỉ
             </span>
           ) : (
-            <span className="text-xs text-slate-400">
-              Cần {5 - stars} sao nữa để nhận huy hiệu đầu tiên
+            <span className="text-slate-400">
+              Cần {5 - stars} sao nữa nhận huy hiệu
             </span>
           )}
           {stars >= 15 && (
-            <span className="px-2.5 py-1 rounded-xl bg-emerald-100 text-emerald-800 text-xs font-bold border border-emerald-300 flex items-center gap-1">
-              🏆 Vua Đánh Vần
-            </span>
+            <>
+              <span aria-hidden="true" className="text-slate-300">·</span>
+              <span className="font-bold text-emerald-700 flex items-center gap-1">
+                🏆 Vua Đánh Vần
+              </span>
+            </>
           )}
         </div>
       </div>
 
-      {/* GAME 1: BÉ GHÉP CHỮ */}
+      {/* 2. GAME VIEWPORT CONTAINER */}
+      {activeGame === 'writing' && (
+        <WritingCanvasGame onAddStar={onAddStar} slowRate={slowRate} />
+      )}
+
+      {activeGame === 'phonics_builder' && (
+        <PhonicsBuilderGame onAddStar={onAddStar} slowRate={slowRate} />
+      )}
+
+      {activeGame === 'train_rime' && (
+        <TrainRimeGame onAddStar={onAddStar} slowRate={slowRate} />
+      )}
+
+      {activeGame === 'matching' && (
+        <MatchingPhonicsGame onAddStar={onAddStar} slowRate={slowRate} />
+      )}
+
+      {/* GAME 5: BÉ GHÉP CHỮ ĐÚNG TRANH */}
       {activeGame === 'spell_quiz' && (
         <div className="max-w-2xl mx-auto bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm text-center space-y-6">
           <div>
@@ -286,12 +365,10 @@ export const PracticeGameTab: React.FC<PracticeGameTabProps> = ({
             </h3>
           </div>
 
-          {/* Picture Box */}
           <div className="w-36 h-36 mx-auto rounded-3xl bg-rose-50 border-2 border-rose-200 flex items-center justify-center text-6xl shadow-inner">
             {currentSpellQuiz.image}
           </div>
 
-          {/* Letter Slot Container */}
           <div className="flex items-center justify-center gap-3 py-2">
             {currentSpellQuiz.missingPart === 'onset' ? (
               <>
@@ -316,7 +393,6 @@ export const PracticeGameTab: React.FC<PracticeGameTabProps> = ({
             )}
           </div>
 
-          {/* Feedback Banner */}
           {spellFeedback === 'correct' && (
             <div className="p-3 bg-emerald-100 border border-emerald-300 text-emerald-800 rounded-2xl font-bold text-sm animate-bounce">
               🎉 Bé giỏi quá! Hoan hô bé đã được +1 Sao Vàng!
@@ -328,7 +404,6 @@ export const PracticeGameTab: React.FC<PracticeGameTabProps> = ({
             </div>
           )}
 
-          {/* Multiple Choice Letter Options */}
           <div>
             <p className="text-xs font-bold text-slate-400 mb-3 uppercase tracking-wider">
               Chạm vào chữ cái đúng để ghép vào ô trống
@@ -349,7 +424,7 @@ export const PracticeGameTab: React.FC<PracticeGameTabProps> = ({
         </div>
       )}
 
-      {/* GAME 2: AI TAI TINH HƠN */}
+      {/* GAME 6: AI TAI TINH HƠN */}
       {activeGame === 'listen_quiz' && (
         <div className="max-w-2xl mx-auto bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm text-center space-y-6">
           <div>
@@ -361,7 +436,6 @@ export const PracticeGameTab: React.FC<PracticeGameTabProps> = ({
             </h3>
           </div>
 
-          {/* Big Audio Play Button */}
           <div className="py-4">
             <button
               onClick={handlePlayListeningAudio}
@@ -375,7 +449,6 @@ export const PracticeGameTab: React.FC<PracticeGameTabProps> = ({
             </p>
           </div>
 
-          {/* Feedback Banner */}
           {listenFeedback === 'correct' && (
             <div className="p-3 bg-emerald-100 border border-emerald-300 text-emerald-800 rounded-2xl font-bold text-sm animate-bounce">
               🎉 Bé có đôi tai thật tinh! Thưởng cho bé 1 Ngôi Sao Vàng!
@@ -387,7 +460,6 @@ export const PracticeGameTab: React.FC<PracticeGameTabProps> = ({
             </div>
           )}
 
-          {/* 4 Choices */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
             {currentListenQuiz.options.map((option, idx) => (
               <button

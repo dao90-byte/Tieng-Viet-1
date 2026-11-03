@@ -2107,7 +2107,7 @@ export const RIME_READING_LESSONS: RimeReadingLesson[] = [
     ],
     "practiceWords": [
       "áo len", "cây nến", "bền bỉ", "tự tin", "mũi tên",
-      "chú sên", "thân mến", "tin cậy", "dế mèn", "bàn chân"
+      "chú sên", "thân mến", "tin cậy", "dế mèn", "thân quen"
     ],
     "sentences": [
       "Bé tự tin chào cô giáo và bè bạn.",
@@ -2178,7 +2178,7 @@ export const RIME_READING_LESSONS: RimeReadingLesson[] = [
     ],
     "practiceWords": [
       "quả cam", "chăm chỉ", "ấm trà", "cây nấm", "màu xám",
-      "tơ tằm", "mầm cây", "can đảm", "chầm chậm", "củ sắn"
+      "tơ tằm", "mầm cây", "can đảm", "chầm chậm", "củ sâm"
     ],
     "sentences": [
       "Bé chăm chỉ rèn chữ mỗi ngày.",
@@ -2203,7 +2203,7 @@ export const RIME_READING_LESSONS: RimeReadingLesson[] = [
     ],
     "practiceWords": [
       "êm ái", "que kem", "tìm tòi", "im re", "mỉm cười",
-      "thân mến", "tấm nệm", "trái tim", "chú chim", "chị em"
+      "êm đềm", "tấm nệm", "trái tim", "chú chim", "chị em"
     ],
     "sentences": [
       "Đàn chim líu lo reo vui trên cây cao.",
@@ -2424,9 +2424,9 @@ export const RIME_READING_LESSONS: RimeReadingLesson[] = [
       { "word": "khuấy đều", "image": "🥄" },
       { "word": "trời khuya", "image": "🌙" },
       { "word": "quây tụ", "image": "👨‍👩‍👦" },
-      { "word": "múa gậy", "image": "🥋" }
+      { "word": "quây quần", "image": "👨‍👩‍👧‍👦" }
     ],
-    "practiceWords": ["khuấy đều", "trời khuya", "quây tụ", "khuya lơ", "múa may"],
+    "practiceWords": ["khuấy đều", "trời khuya", "quây tụ", "khuya lơ", "đêm khuya"],
     "sentences": [
       "Trời khuya, bà và mẹ chưa ngủ.",
       "Mẹ khuấy đều cháo cho bé.",
@@ -2481,14 +2481,14 @@ export const RIME_READING_LESSONS: RimeReadingLesson[] = [
     "illustratedWords": [
       { "word": "hoa huệ", "image": "🌺" },
       { "word": "thuở xưa", "image": "📜" },
-      { "word": "khua tay", "image": "👋" },
+      { "word": "huơ tay", "image": "👋" },
       { "word": "huệ đỏ", "image": "🌹" }
     ],
-    "practiceWords": ["hoa huệ", "thuở nhỏ", "khua tay", "chú hề", "huệ đỏ"],
+    "practiceWords": ["hoa huệ", "thuở nhỏ", "huơ tay", "vạn tuế", "huệ đỏ"],
     "sentences": [
       "Nhà bà có cây hoa huệ nở hoa.",
       "Thuở nhỏ, bà ru bé ngủ trưa.",
-      "Bé khua tay chào bố mẹ."
+      "Bé huơ tay chào bố mẹ."
     ]
   },
   {
@@ -2537,15 +2537,15 @@ export const RIME_READING_LESSONS: RimeReadingLesson[] = [
     "title": "oeo - oay",
     "bookPage": 119,
     "illustratedWords": [
+      { "word": "ngoằn ngoèo", "image": "〰️" },
       { "word": "loay hoay", "image": "⚙️" },
       { "word": "xoay đều", "image": "🔄" },
-      { "word": "chú mèo", "image": "🐱" },
-      { "word": "mèo leo", "image": "🐾" }
+      { "word": "xoay tròn", "image": "🌀" }
     ],
-    "practiceWords": ["loay hoay", "xoay đều", "khoái chí", "chú mèo", "mèo leo"],
+    "practiceWords": ["ngoằn ngoèo", "loay hoay", "xoay đều", "xoay tròn", "cú xoay"],
     "sentences": [
       "Bé loay hoay lau đôi giày mới.",
-      "Chú mèo leo trèo ở cây cau.",
+      "Con đường ngoằn ngoèo uốn lượn qua bãi cỏ.",
       "Gió thổi làm lá cây xoay đều."
     ]
   },
@@ -2596,7 +2596,7 @@ export const RIME_READING_LESSONS: RimeReadingLesson[] = [
       { "word": "xà beng", "image": "⛏️" },
       { "word": "cái chiêng", "image": "🥁" }
     ],
-    "practiceWords": ["cái kẻng", "sầu riêng", "tiếng chiêng", "xà beng", "láng giềng", "êng ễnh"],
+    "practiceWords": ["cái kẻng", "sầu riêng", "tiếng chiêng", "xà beng", "láng giềng", "leng keng"],
     "sentences": [
       "Tiếng kẻng vang lên rộn rã ở xóm làng.",
       "Quả sầu riêng chín thơm lan tỏa cả gian nhà.",
@@ -2670,7 +2670,7 @@ export const RIME_READING_LESSONS: RimeReadingLesson[] = [
       { "word": "chuông gió", "image": "🎐" },
       { "word": "con mương", "image": "🏞️" },
       { "word": "ruộng lúa", "image": "🌾" },
-      { "word": "con vượn", "image": "🐒" }
+      { "word": "bức tường", "image": "🧱" }
     ],
     "practiceWords": ["tiếng chuông", "con đường", "bờ tường", "dòng mương", "quê hương", "yêu thương"],
     "sentences": [
@@ -2712,7 +2712,7 @@ export const RIME_READING_LESSONS: RimeReadingLesson[] = [
       { "word": "trái mít", "image": "🍈" },
       { "word": "dệt vải", "image": "🧵" }
     ],
-    "practiceWords": ["con vẹt", "dệt vải", "trái mít", "bánh tét", "bền chặt", "vui tết"],
+    "practiceWords": ["con vẹt", "dệt vải", "trái mít", "bánh tét", "vịt con", "vui tết"],
     "sentences": [
       "Chú vẹt có mỏ đỏ, biết nhại tiếng người thật vui.",
       "Mẹ bổ quả mít mật thơm ngon cho bé.",
@@ -2838,7 +2838,7 @@ export const RIME_READING_LESSONS: RimeReadingLesson[] = [
       { "word": "kịp giờ", "image": "⏰" },
       { "word": "xôi nếp", "image": "🍚" }
     ],
-    "practiceWords": ["đôi dép", "bếp lửa", "xôi nếp", "kịp giờ", "ngăn nắp", "bắt kịp"],
+    "practiceWords": ["đôi dép", "bếp lửa", "xôi nếp", "kịp giờ", "xếp hàng", "bắt kịp"],
     "sentences": [
       "Bé xếp đôi dép ngay ngắn trước bậc thềm nhà.",
       "Mùi xôi nếp thơm nồng bốc lên từ gian bếp ấm cúng.",
