@@ -11,16 +11,9 @@ import {
   RIME_READING_LESSONS,
   PRACTICE_STORIES,
 } from '../src/data/vietnameseData';
-import { WRITING_ITEMS } from '../src/data/writingData';
 import {
-  ONSETS,
-  RIMES,
-  TONES,
-  MEANINGFUL_WORDS,
-  TRAIN_CHALLENGES,
-  MATCHING_ROUNDS,
-  combinePhonics,
-} from '../src/data/blendingData';
+  BALLOON_PHONICS_LESSONS,
+} from '../src/data/balloonPhonicsData';
 
 interface AuditIssue {
   round: number;
@@ -30,7 +23,6 @@ interface AuditIssue {
   severity: 'error' | 'warning';
 }
 
-// Bỏ dấu thanh tiếng Việt nhưng giữ nguyên âm có mũ / móc (ă, â, ê, ô, ơ, ư)
 function stripTonesOnly(str: string): string {
   return str
     .toLowerCase()
@@ -67,7 +59,7 @@ function runAuditRound(roundNum: number): AuditIssue[] {
   });
 
   // ==========================================
-  // 2. KIỂM TRA BẢNG NGUYÊN ÂM VÀ DẤU THANH
+  // 2. KIỂM TRA NGUYÊN ÂM VÀ DẤU THANH
   // ==========================================
   VOWELS_WITH_TONES.forEach((vt) => {
     if (!vt.vowel || !Array.isArray(vt.tones) || vt.tones.length !== 6) {
@@ -75,14 +67,14 @@ function runAuditRound(roundNum: number): AuditIssue[] {
         round: roundNum,
         category: 'VOWELS_WITH_TONES',
         itemId: vt.vowel,
-        issue: `Nguyên âm "${vt.vowel}" không có đủ 6 dấu thanh (ngang, sắc, huyền, hỏi, ngã, nặng)`,
+        issue: `Nguyên âm "${vt.vowel}" không có đủ 6 dấu thanh`,
         severity: 'error',
       });
     }
   });
 
   // ==========================================
-  // 3. KIỂM TRA PHỤ ÂM VÀ LUẬT CHÍNH TẢ (CONSONANT_LESSONS)
+  // 3. KIỂM TRA PHỤ ÂM VÀ QUY TẮC CHÍNH TẢ
   // ==========================================
   CONSONANT_LESSONS.forEach((lesson) => {
     lesson.rows.forEach((row) => {
@@ -155,7 +147,6 @@ function runAuditRound(roundNum: number): AuditIssue[] {
 
     lesson.illustratedWords.forEach((iw) => {
       const strippedWord = stripTonesOnly(iw.word);
-      // Chia thành các từ đơn
       const syllables = strippedWord.split(/\s+/);
       const matched = syllables.some((syl) =>
         normalizedLessonRimes.some((nr) => syl.endsWith(nr) || syl.includes(nr))
@@ -165,7 +156,7 @@ function runAuditRound(roundNum: number): AuditIssue[] {
           round: roundNum,
           category: 'RIME_ILLUSTRATION_MISMATCH',
           itemId: `${lesson.id}_${iw.word}`,
-          issue: `Từ minh họa "${iw.word}" (âm tiết: ${syllables.join('/')}) không khớp bất kỳ vần nào [${normalizedLessonRimes.join(', ')}] của bài ${lesson.title}`,
+          issue: `Từ minh họa "${iw.word}" không khớp bất kỳ vần nào [${normalizedLessonRimes.join(', ')}]`,
           severity: 'warning',
         });
       }
@@ -182,7 +173,7 @@ function runAuditRound(roundNum: number): AuditIssue[] {
           round: roundNum,
           category: 'RIME_PRACTICE_MISMATCH',
           itemId: `${lesson.id}_${pw}`,
-          issue: `Từ luyện đọc "${pw}" không khớp bất kỳ vần nào [${normalizedLessonRimes.join(', ')}] của bài ${lesson.title}`,
+          issue: `Từ luyện đọc "${pw}" không khớp bất kỳ vần nào [${normalizedLessonRimes.join(', ')}]`,
           severity: 'warning',
         });
       }
@@ -190,56 +181,75 @@ function runAuditRound(roundNum: number): AuditIssue[] {
   });
 
   // ==========================================
-  // 5. KIỂM TRA DỮ LIỆU TẬP TÔ (writingData)
+  // 5. KIỂM TRA BỘ TRÒ CHƠI BONG BÓNG (Ghép vần & Luyện tai tinh)
   // ==========================================
-  WRITING_ITEMS.forEach((item) => {
-    if (!item.id || !item.char || !item.name || !item.spellingAudio) {
+  BALLOON_PHONICS_LESSONS.forEach((item) => {
+    // a. Kiểm tra options
+    if (!item.options || item.options.length !== 4) {
       issues.push({
         round: roundNum,
-        category: 'WRITING_ITEM',
+        category: 'BALLOON_OPTIONS',
         itemId: item.id,
-        issue: `Thiếu trường dữ liệu viết`,
+        issue: `Số lượng lựa chọn bóng bay phải là 4 (hiện tại: ${item.options?.length})`,
         severity: 'error',
       });
     }
-  });
 
-  // ==========================================
-  // 6. KIỂM TRA TRÒ CHƠI GHÉP VẦN (blendingData)
-  // ==========================================
-  TRAIN_CHALLENGES.forEach((t) => {
-    if (!t.options.includes(t.targetMissing)) {
+    // b. Kiểm tra targetMissing có nằm trong options
+    if (!item.options.includes(item.targetMissing)) {
       issues.push({
         round: roundNum,
-        category: 'TRAIN_CHALLENGE',
-        itemId: t.id,
-        issue: `targetMissing "${t.targetMissing}" không nằm trong options: [${t.options.join(', ')}]`,
+        category: 'BALLOON_ANSWER_MISSING',
+        itemId: item.id,
+        issue: `Đáp án đúng "${item.targetMissing}" không nằm trong danh sách lựa chọn: [${item.options.join(', ')}]`,
         severity: 'error',
       });
     }
-    if (`${t.prefix}${t.targetMissing}` !== t.fullWord) {
-      issues.push({
-        round: roundNum,
-        category: 'TRAIN_CHALLENGE',
-        itemId: t.id,
-        issue: `prefix "${t.prefix}" + targetMissing "${t.targetMissing}" !== fullWord "${t.fullWord}"`,
-        severity: 'error',
-      });
-    }
-  });
 
-  MATCHING_ROUNDS.forEach((m) => {
-    m.items.forEach((item) => {
-      if (`${item.onset}${item.rimeAndTone}` !== item.word) {
+    // c. Kiểm tra câu hỏi theo loại bài:
+    if (item.challengeType === 'blend') {
+      if (`${item.prefix}${item.targetMissing}` !== item.fullWord) {
         issues.push({
           round: roundNum,
-          category: 'MATCHING_ITEM',
+          category: 'BALLOON_SPELLING_MISMATCH',
           itemId: item.id,
-          issue: `onset "${item.onset}" + rimeAndTone "${item.rimeAndTone}" !== word "${item.word}"`,
+          issue: `prefix "${item.prefix}" + targetMissing "${item.targetMissing}" !== fullWord "${item.fullWord}"`,
           severity: 'error',
         });
       }
-    });
+    } else if (item.challengeType === 'listen') {
+      if (item.targetMissing !== item.fullWord) {
+        issues.push({
+          round: roundNum,
+          category: 'BALLOON_LISTEN_MISMATCH',
+          itemId: item.id,
+          issue: `targetMissing "${item.targetMissing}" !== fullWord "${item.fullWord}" trong bài luyện tai tinh`,
+          severity: 'error',
+        });
+      }
+    }
+
+    // d. Kiểm tra số trang sách hợp lệ
+    if (!item.pageNumber || item.pageNumber <= 0) {
+      issues.push({
+        round: roundNum,
+        category: 'BALLOON_PAGE_INVALID',
+        itemId: item.id,
+        issue: `Số trang sách không hợp lệ: ${item.pageNumber}`,
+        severity: 'error',
+      });
+    }
+
+    // e. Kiểm tra phân loại Chặng (1..5)
+    if (![1, 2, 3, 4, 5].includes(item.stage)) {
+      issues.push({
+        round: roundNum,
+        category: 'BALLOON_STAGE_INVALID',
+        itemId: item.id,
+        issue: `Chặng học không hợp lệ: ${item.stage}`,
+        severity: 'error',
+      });
+    }
   });
 
   return issues;
@@ -249,7 +259,7 @@ function runAuditRound(roundNum: number): AuditIssue[] {
 console.log('=== TIẾN HÀNH KIỂM TRA TOÀN DIỆN 3 VÒNG LẶP (LOGIC, CHÍNH TẢ & PHÁT ÂM) ===\n');
 
 for (let r = 1; r <= 3; r++) {
-  console.log(`\n=================== VÒNG LẶP KIỂM TRA THỨ ${r} ===================`);
+  console.log(`=================== VÒNG LẶP KIỂM TRA THỨ ${r} ===================`);
   const issues = runAuditRound(r);
   const errors = issues.filter((i) => i.severity === 'error');
   const warnings = issues.filter((i) => i.severity === 'warning');

@@ -6,8 +6,55 @@
 // Cache in browser for base64 audio responses
 const clientAudioCache = new Map<string, string>();
 let currentAudio: HTMLAudioElement | null = null;
+let sharedAudio: HTMLAudioElement | null = null;
+let isAudioUnlocked = false;
 let ttsApiDisabledUntil = 0;
 let preferredReadingVoiceUri: string | null = null;
+declare global {
+  interface Window {
+    __activeUtterance?: SpeechSynthesisUtterance | null;
+  }
+}
+
+/**
+ * Mở khóa âm thanh (Audio Context / HTMLAudioElement) cho các dòng iPad cũ chạy iOS Safari
+ */
+export function unlockAudioForIOS() {
+  if (isAudioUnlocked) return;
+  try {
+    if (!sharedAudio && typeof Audio !== 'undefined') {
+      sharedAudio = new Audio();
+      sharedAudio.setAttribute('playsinline', 'true');
+      sharedAudio.setAttribute('webkit-playsinline', 'true');
+    }
+    if (sharedAudio) {
+      // Phát 1 frame âm thanh im lặng để mở khóa quyền phát media trong iOS Safari
+      sharedAudio.src = 'data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA';
+      const playPromise = sharedAudio.play();
+      if (playPromise !== undefined) {
+        playPromise
+          .then(() => {
+            isAudioUnlocked = true;
+          })
+          .catch(() => {});
+      } else {
+        isAudioUnlocked = true;
+      }
+    }
+  } catch {
+    // ignore
+  }
+}
+
+// Tự động mở khóa ngay trong lần tương tác chạm/bấm đầu tiên của người dùng trên iPad
+if (typeof window !== 'undefined') {
+  const unlockEvents = ['touchstart', 'touchend', 'click', 'pointerdown'];
+  const handleFirstInteraction = () => {
+    unlockAudioForIOS();
+    unlockEvents.forEach((ev) => window.removeEventListener(ev, handleFirstInteraction));
+  };
+  unlockEvents.forEach((ev) => window.addEventListener(ev, handleFirstInteraction, { passive: true }));
+}
 
 // Preload static TTS cache on static environments like GitHub Pages
 if (typeof window !== 'undefined') {
@@ -816,7 +863,15 @@ export function speakWebSpeech(
       return;
     }
 
-    window.speechSynthesis.cancel();
+    try {
+      if (window.speechSynthesis.paused) {
+        window.speechSynthesis.resume();
+      }
+      window.speechSynthesis.cancel();
+    } catch {
+      // ignore
+    }
+
     const spokenText = cleanTextForVietnameseSpeech(text);
     const utterance = new SpeechSynthesisUtterance(spokenText);
     utterance.lang = 'vi-VN';
@@ -853,10 +908,25 @@ export function speakWebSpeech(
       }
     }
 
-    utterance.onend = () => resolve();
-    utterance.onerror = () => resolve();
+    // iOS Safari bugfix: gán vào biến window để ngăn GC thu hồi sớm utterance
+    window.__activeUtterance = utterance;
+    let finished = false;
+    const cleanUpAndResolve = () => {
+      if (finished) return;
+      finished = true;
+      window.__activeUtterance = null;
+      resolve();
+    };
 
-    window.speechSynthesis.speak(utterance);
+    utterance.onend = cleanUpAndResolve;
+    utterance.onerror = cleanUpAndResolve;
+    setTimeout(cleanUpAndResolve, 8000); // Guard timeout nếu iOS bị treo
+
+    try {
+      window.speechSynthesis.speak(utterance);
+    } catch {
+      cleanUpAndResolve();
+    }
   });
 }
 
@@ -970,18 +1040,42 @@ export async function speakAI(
 function playAudioUrl(url: string, rate: number = 1.08): Promise<void> {
   return new Promise((resolve, reject) => {
     try {
-      const audio = new Audio(url);
+      unlockAudioForIOS();
+      let audio = sharedAudio;
+      if (!audio) {
+        audio = new Audio();
+        audio.setAttribute('playsinline', 'true');
+        audio.setAttribute('webkit-playsinline', 'true');
+        sharedAudio = audio;
+      }
+      try {
+        audio.pause();
+        audio.currentTime = 0;
+      } catch {
+        // ignore
+      }
+
+      audio.src = url;
       audio.playbackRate = rate;
       currentAudio = audio;
-      audio.onended = () => {
+
+      let settled = false;
+      const done = (isErr = false, err?: unknown) => {
+        if (settled) return;
+        settled = true;
         currentAudio = null;
-        resolve();
+        if (isErr) reject(err);
+        else resolve();
       };
-      audio.onerror = (e) => {
-        currentAudio = null;
-        reject(e);
-      };
-      audio.play().catch(reject);
+
+      audio.onended = () => done(false);
+      audio.onerror = (e) => done(true, e);
+      setTimeout(() => done(false), 5000); // 5s timeout guard cho iPad cũ
+
+      const p = audio.play();
+      if (p !== undefined) {
+        p.catch((err) => done(true, err));
+      }
     } catch (e) {
       reject(e);
     }
@@ -994,19 +1088,45 @@ function playAudioUrl(url: string, rate: number = 1.08): Promise<void> {
 function playAudioBase64(base64: string, rate: number = 1.14): Promise<void> {
   return new Promise((resolve, reject) => {
     try {
+      unlockAudioForIOS();
       const mime = base64.startsWith('UklGR') ? 'audio/wav' : 'audio/mpeg';
-      const audio = new Audio(`data:${mime};base64,${base64}`);
+      const dataSrc = `data:${mime};base64,${base64}`;
+
+      let audio = sharedAudio;
+      if (!audio) {
+        audio = new Audio();
+        audio.setAttribute('playsinline', 'true');
+        audio.setAttribute('webkit-playsinline', 'true');
+        sharedAudio = audio;
+      }
+      try {
+        audio.pause();
+        audio.currentTime = 0;
+      } catch {
+        // ignore
+      }
+
+      audio.src = dataSrc;
       audio.playbackRate = rate;
       currentAudio = audio;
-      audio.onended = () => {
+
+      let settled = false;
+      const done = (isErr = false, err?: unknown) => {
+        if (settled) return;
+        settled = true;
         currentAudio = null;
-        resolve();
+        if (isErr) reject(err);
+        else resolve();
       };
-      audio.onerror = (e) => {
-        currentAudio = null;
-        reject(e);
-      };
-      audio.play().catch(reject);
+
+      audio.onended = () => done(false);
+      audio.onerror = (e) => done(true, e);
+      setTimeout(() => done(false), 5000); // 5s timeout guard
+
+      const p = audio.play();
+      if (p !== undefined) {
+        p.catch((err) => done(true, err));
+      }
     } catch (e) {
       reject(e);
     }
