@@ -7,6 +7,8 @@
 const clientAudioCache = new Map<string, string>();
 let currentAudio: HTMLAudioElement | null = null;
 let sharedAudio: HTMLAudioElement | null = null;
+let globalAudioContext: AudioContext | null = null;
+let currentSourceNode: AudioBufferSourceNode | null = null;
 let isAudioUnlocked = false;
 let ttsApiDisabledUntil = 0;
 let preferredReadingVoiceUri: string | null = null;
@@ -17,24 +19,79 @@ declare global {
 }
 
 /**
- * Mở khóa âm thanh (Audio Context / HTMLAudioElement) cho các dòng iPad cũ chạy iOS Safari
+ * Lấy hoặc khởi tạo Web Audio Context (tương thích toàn diện iOS Safari trên iPad)
+ */
+export function getAudioContext(): AudioContext | null {
+  if (typeof window === 'undefined') return null;
+  if (!globalAudioContext) {
+    const AudioCtx =
+      window.AudioContext ||
+      (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
+    if (AudioCtx) {
+      globalAudioContext = new AudioCtx();
+    }
+  }
+  if (globalAudioContext && globalAudioContext.state === 'suspended') {
+    globalAudioContext.resume().catch(() => {});
+  }
+  return globalAudioContext;
+}
+
+/**
+ * Chuyển Base64 thành ArrayBuffer an toàn
+ */
+function base64ToArrayBuffer(base64: string): ArrayBuffer {
+  const binaryString = window.atob(base64);
+  const len = binaryString.length;
+  const bytes = new Uint8Array(len);
+  for (let i = 0; i < len; i++) {
+    bytes[i] = binaryString.charCodeAt(i);
+  }
+  return bytes.buffer;
+}
+
+/**
+ * Mở khóa âm thanh (cả Web Audio Context lẫn HTMLAudioElement) cho các dòng iPad cũ chạy iOS Safari
  */
 export function unlockAudioForIOS() {
   if (isAudioUnlocked) return;
   try {
+    // 1. Mở khóa Web Audio Context
+    const ctx = getAudioContext();
+    if (ctx) {
+      if (ctx.state === 'suspended') {
+        ctx.resume().catch(() => {});
+      }
+      try {
+        const buffer = ctx.createBuffer(1, 1, 22050);
+        const source = ctx.createBufferSource();
+        source.buffer = buffer;
+        source.connect(ctx.destination);
+        source.start(0);
+      } catch {
+        // ignore
+      }
+    }
+
+    // 2. Mở khóa HTMLAudioElement với WAV Blob
     if (!sharedAudio && typeof Audio !== 'undefined') {
       sharedAudio = new Audio();
       sharedAudio.setAttribute('playsinline', 'true');
       sharedAudio.setAttribute('webkit-playsinline', 'true');
     }
     if (sharedAudio) {
-      // Phát 1 frame âm thanh im lặng để mở khóa quyền phát media trong iOS Safari
-      sharedAudio.src = 'data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA';
+      const silentBase64 = 'UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA';
+      const blob = new Blob([base64ToArrayBuffer(silentBase64)], { type: 'audio/wav' });
+      const blobUrl = URL.createObjectURL(blob);
+      sharedAudio.src = blobUrl;
       const playPromise = sharedAudio.play();
       if (playPromise !== undefined) {
         playPromise
           .then(() => {
             isAudioUnlocked = true;
+            try {
+              URL.revokeObjectURL(blobUrl);
+            } catch {}
           })
           .catch(() => {});
       } else {
@@ -888,10 +945,11 @@ export function speakWebSpeech(
     }
 
     // 2. Nếu chưa có, tự động chọn giọng nữ tiếng Việt truyền cảm, dịu dàng
-    if (!utterance.voice && voices.length > 0) {
-      const viVoices = voices.filter(
-        (v) => v.lang.startsWith('vi') || v.lang.includes('VN')
-      );
+    const viVoices = voices.filter(
+      (v) => v.lang.startsWith('vi') || v.lang.includes('VN')
+    );
+
+    if (!utterance.voice && viVoices.length > 0) {
       const naturalFemaleVoice = viVoices.find(
         (v) =>
           v.name.includes('HoaiMy') ||
@@ -906,6 +964,12 @@ export function speakWebSpeech(
         preferredReadingVoiceUri = utterance.voice.voiceURI;
         saveStoredVoiceUri(utterance.voice.voiceURI);
       }
+    }
+
+    // Nếu trên thiết bị không có giọng tiếng Việt, tuyệt đối không dùng giọng tiếng Anh đọc tiếng Việt
+    if (!utterance.voice && viVoices.length === 0) {
+      resolve();
+      return;
     }
 
     // iOS Safari bugfix: gán vào biến window để ngăn GC thu hồi sớm utterance
@@ -933,6 +997,9 @@ export function speakWebSpeech(
 /**
  * Gọi API Gemini TTS để lấy audio WAV base64 với giọng cô giáo tiểu học chuẩn mực, truyền cảm
  */
+/**
+ * Gọi API Gemini TTS hoặc lấy từ client cache với giọng cô giáo tiểu học chuẩn mực, truyền cảm
+ */
 export async function fetchTTSAudio(
   text: string,
   style?: string
@@ -940,9 +1007,36 @@ export async function fetchTTSAudio(
   const trimmed = text.trim();
   if (!trimmed) return null;
   const cleaned = cleanTextForVietnameseSpeech(trimmed);
+
+  // 1. Kiểm tra chính xác cache key đầy đủ
   const cacheKey = `${cleaned}_${style || 'default'}`;
   if (clientAudioCache.has(cacheKey)) {
     return clientAudioCache.get(cacheKey)!;
+  }
+
+  // 2. Kiểm tra cleaned text hoặc trimmed text trực tiếp (kho 770+ âm chuẩn sẵn có)
+  if (clientAudioCache.has(cleaned)) {
+    return clientAudioCache.get(cleaned)!;
+  }
+  if (clientAudioCache.has(trimmed)) {
+    return clientAudioCache.get(trimmed)!;
+  }
+
+  // 3. Kiểm tra biến thể hậu tố _default
+  const defaultCleaned = `${cleaned}_default`;
+  if (clientAudioCache.has(defaultCleaned)) {
+    return clientAudioCache.get(defaultCleaned)!;
+  }
+  const defaultTrimmed = `${trimmed}_default`;
+  if (clientAudioCache.has(defaultTrimmed)) {
+    return clientAudioCache.get(defaultTrimmed)!;
+  }
+
+  // 4. Tìm kiếm linh hoạt bất kỳ cache key nào khớp tiền tố
+  for (const [k, v] of clientAudioCache.entries()) {
+    if (k === cleaned || k.startsWith(cleaned + '_') || k === trimmed || k.startsWith(trimmed + '_')) {
+      return v;
+    }
   }
 
   if (Date.now() < ttsApiDisabledUntil) {
@@ -957,7 +1051,7 @@ export async function fetchTTSAudio(
         text: cleaned,
         style:
           style ||
-          'A lively, clear, warm Vietnamese primary school teacher pronouncing Vietnamese letters and phonics at an active, brisk and encouraging pace for first grade children. Ensure bé has an open e sound, bê has a close ê sound, and ay has an ay sound distinct from ai.',
+          'A lively, clear, warm Vietnamese primary school teacher pronouncing Vietnamese letters and phonics at an active, brisk and engaging pace for first grade children. Ensure bé has an open e sound, bê has a close ê sound, and ay has an ay sound distinct from ai.',
       }),
     });
 
@@ -971,12 +1065,169 @@ export async function fetchTTSAudio(
     const data = await res.json();
     if (data.audioBase64) {
       clientAudioCache.set(cacheKey, data.audioBase64);
+      clientAudioCache.set(cleaned, data.audioBase64);
       return data.audioBase64;
     }
   } catch {
     ttsApiDisabledUntil = Date.now() + 15000;
   }
   return null;
+}
+
+/**
+ * Phát âm thanh trực tiếp qua Web Audio API (chuẩn xác 100% trên mọi dòng iPad và iOS Safari)
+ */
+async function playAudioBufferWebAudio(arrayBuffer: ArrayBuffer, rate: number = 1.0): Promise<void> {
+  const ctx = getAudioContext();
+  if (!ctx) throw new Error('No AudioContext available');
+
+  if (ctx.state === 'suspended') {
+    await ctx.resume().catch(() => {});
+  }
+
+  // Clone buffer vì decodeAudioData có thể detach ArrayBuffer
+  const bufferCopy = arrayBuffer.slice(0);
+  const audioBuffer = await new Promise<AudioBuffer>((resolve, reject) => {
+    ctx.decodeAudioData(bufferCopy, resolve, reject);
+  });
+
+  if (currentSourceNode) {
+    try {
+      currentSourceNode.stop();
+      currentSourceNode.disconnect();
+    } catch {
+      // ignore
+    }
+    currentSourceNode = null;
+  }
+
+  const source = ctx.createBufferSource();
+  source.buffer = audioBuffer;
+  source.playbackRate.value = rate;
+
+  // Khuếch đại âm lượng trong trẻo rõ nét cho loa iPad
+  const gainNode = ctx.createGain();
+  gainNode.gain.value = 1.1;
+
+  source.connect(gainNode);
+  gainNode.connect(ctx.destination);
+  currentSourceNode = source;
+
+  return new Promise((resolve) => {
+    let settled = false;
+    const finish = () => {
+      if (settled) return;
+      settled = true;
+      if (currentSourceNode === source) {
+        currentSourceNode = null;
+      }
+      resolve();
+    };
+
+    source.onended = finish;
+    source.start(0);
+
+    // Timeout guard dự phòng không bao giờ làm treo giao diện
+    const durationMs = (audioBuffer.duration / rate) * 1000 + 250;
+    setTimeout(finish, Math.max(800, durationMs));
+  });
+}
+
+/**
+ * Dừng mọi âm thanh đang phát
+ */
+export function stopAllSpeech() {
+  if (currentSourceNode) {
+    try {
+      currentSourceNode.stop();
+      currentSourceNode.disconnect();
+    } catch {
+      // ignore
+    }
+    currentSourceNode = null;
+  }
+  if (currentAudio) {
+    try {
+      currentAudio.pause();
+      currentAudio.currentTime = 0;
+    } catch {
+      // ignore
+    }
+    currentAudio = null;
+  }
+  if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+    window.speechSynthesis.cancel();
+  }
+}
+
+/**
+ * Phát âm thanh từ Base64: Tương thích 100% iPad bằng Web Audio API + Blob URL
+ */
+async function playAudioBase64(base64: string, rate: number = 1.08): Promise<void> {
+  stopAllSpeech();
+  unlockAudioForIOS();
+
+  const arrayBuffer = base64ToArrayBuffer(base64);
+
+  // 1. Ưu tiên Web Audio API (hoạt động hoàn hảo trên mọi iPad, không bị lỗi CORS/data-URI)
+  try {
+    await playAudioBufferWebAudio(arrayBuffer, rate);
+    return;
+  } catch (webAudioErr) {
+    console.warn('Web Audio playback failed, falling back to Blob URL:', webAudioErr);
+  }
+
+  // 2. Dự phòng: HTMLAudioElement bằng Blob URL (an toàn tuyệt đối cho iOS Safari)
+  return new Promise((resolve, reject) => {
+    try {
+      const mime = base64.startsWith('UklGR') ? 'audio/wav' : 'audio/mpeg';
+      const blob = new Blob([arrayBuffer], { type: mime });
+      const blobUrl = URL.createObjectURL(blob);
+
+      let audio = sharedAudio;
+      if (!audio) {
+        audio = new Audio();
+        audio.setAttribute('playsinline', 'true');
+        audio.setAttribute('webkit-playsinline', 'true');
+        sharedAudio = audio;
+      }
+      try {
+        audio.pause();
+        audio.currentTime = 0;
+      } catch {
+        // ignore
+      }
+
+      audio.src = blobUrl;
+      audio.playbackRate = rate;
+      currentAudio = audio;
+
+      let settled = false;
+      const done = (isErr = false, err?: unknown) => {
+        if (settled) return;
+        settled = true;
+        currentAudio = null;
+        try {
+          URL.revokeObjectURL(blobUrl);
+        } catch {
+          // ignore
+        }
+        if (isErr) reject(err);
+        else resolve();
+      };
+
+      audio.onended = () => done(false);
+      audio.onerror = (e) => done(true, e);
+      setTimeout(() => done(false), 5000); // 5s timeout guard
+
+      const p = audio.play();
+      if (p !== undefined) {
+        p.catch((err) => done(true, err));
+      }
+    } catch (e) {
+      reject(e);
+    }
+  });
 }
 
 /**
@@ -1006,7 +1257,7 @@ export async function speakAI(
   const audioBase64 = await fetchTTSAudio(trimmed, options.style);
   if (audioBase64) {
     try {
-      await playAudioBase64(audioBase64);
+      await playAudioBase64(audioBase64, options.rate ? options.rate * 1.05 : 1.08);
       options.onEnd?.();
       return;
     } catch {
@@ -1082,74 +1333,6 @@ function playAudioUrl(url: string, rate: number = 1.08): Promise<void> {
   });
 }
 
-/**
- * Phát âm thanh từ Base64 WAV
- */
-function playAudioBase64(base64: string, rate: number = 1.14): Promise<void> {
-  return new Promise((resolve, reject) => {
-    try {
-      unlockAudioForIOS();
-      const mime = base64.startsWith('UklGR') ? 'audio/wav' : 'audio/mpeg';
-      const dataSrc = `data:${mime};base64,${base64}`;
-
-      let audio = sharedAudio;
-      if (!audio) {
-        audio = new Audio();
-        audio.setAttribute('playsinline', 'true');
-        audio.setAttribute('webkit-playsinline', 'true');
-        sharedAudio = audio;
-      }
-      try {
-        audio.pause();
-        audio.currentTime = 0;
-      } catch {
-        // ignore
-      }
-
-      audio.src = dataSrc;
-      audio.playbackRate = rate;
-      currentAudio = audio;
-
-      let settled = false;
-      const done = (isErr = false, err?: unknown) => {
-        if (settled) return;
-        settled = true;
-        currentAudio = null;
-        if (isErr) reject(err);
-        else resolve();
-      };
-
-      audio.onended = () => done(false);
-      audio.onerror = (e) => done(true, e);
-      setTimeout(() => done(false), 5000); // 5s timeout guard
-
-      const p = audio.play();
-      if (p !== undefined) {
-        p.catch((err) => done(true, err));
-      }
-    } catch (e) {
-      reject(e);
-    }
-  });
-}
-
-/**
- * Dừng mọi âm thanh đang phát
- */
-export function stopAllSpeech() {
-  if (currentAudio) {
-    try {
-      currentAudio.pause();
-      currentAudio.currentTime = 0;
-    } catch {
-      // ignore
-    }
-    currentAudio = null;
-  }
-  if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
-    window.speechSynthesis.cancel();
-  }
-}
 
 /**
  * Phát âm đánh vần: Đọc trọn vẹn câu đánh vần nhịp nhàng của cô giáo

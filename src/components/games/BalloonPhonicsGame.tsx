@@ -11,7 +11,7 @@ import {
   BalloonLessonItem,
   BALLOON_COLOR_MAP,
 } from '../../data/balloonPhonicsData';
-import { speakAI, spellOutSyllable } from '../../services/speechService';
+import { speakAI } from '../../services/speechService';
 
 interface BalloonPhonicsGameProps {
   onAddStar: () => void;
@@ -24,6 +24,41 @@ const BALLOON_COLOR_KEYS: ('pink' | 'blue' | 'yellow' | 'emerald')[] = [
   'yellow',
   'emerald',
 ];
+
+/**
+ * Phát âm thanh hiệu ứng (sound effect) khi bé chọn sai - KHÔNG dùng giọng đọc
+ */
+function playWrongSoundEffect() {
+  try {
+    const AudioCtx = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
+    if (!AudioCtx) return;
+    const ctx = new AudioCtx();
+    if (ctx.state === 'suspended') {
+      ctx.resume();
+    }
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+
+    const now = ctx.currentTime;
+    // Âm thanh hoạt hình hai nốt tụt xuống nhẹ nhàng, ngộ nghĩnh, không dùng giọng đọc
+    osc.type = 'triangle';
+    osc.frequency.setValueAtTime(300, now);
+    osc.frequency.setValueAtTime(300, now + 0.1);
+    osc.frequency.setValueAtTime(200, now + 0.12);
+    osc.frequency.exponentialRampToValueAtTime(130, now + 0.38);
+
+    gain.gain.setValueAtTime(0.28, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.4);
+
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+
+    osc.start(now);
+    osc.stop(now + 0.4);
+  } catch (e) {
+    console.warn('Audio effect playback error', e);
+  }
+}
 
 export const BalloonPhonicsGame: React.FC<BalloonPhonicsGameProps> = ({
   onAddStar,
@@ -71,17 +106,11 @@ export const BalloonPhonicsGame: React.FC<BalloonPhonicsGameProps> = ({
     setSelectedAnswer(null);
   };
 
-  // Listen to prompt audio
+  // "Bấm nghe cô đọc từ mẫu" chỉ phát âm thanh từ mẫu
   const handlePlayWordAudio = async () => {
-    if (current.challengeType === 'listen') {
-      await speakAI(current.fullWord, {
-        rate: slowRate ? 0.75 : 0.85,
-      });
-    } else {
-      await speakAI(`Bé hãy chọn bóng bay ghép từ: ${current.fullWord}`, {
-        rate: slowRate ? 0.75 : 0.85,
-      });
-    }
+    await speakAI(current.fullWord, {
+      rate: slowRate ? 0.75 : 0.85,
+    });
   };
 
   // Handle select balloon
@@ -99,29 +128,24 @@ export const BalloonPhonicsGame: React.FC<BalloonPhonicsGameProps> = ({
       onAddStar();
 
       try {
-        if (current.challengeType === 'listen') {
-          await speakAI(current.fullWord, { rate: slowRate ? 0.8 : 0.9 });
-        } else {
-          await spellOutSyllable(current.fullWord);
-        }
-      } catch {
-        await speakAI(current.spellingScript, {
-          rate: slowRate ? 0.8 : 0.9,
-        });
+        await speakAI('Ye, bé giỏiiii', { rate: slowRate ? 0.85 : 0.95 });
+      } catch (err) {
+        console.warn('Speech error', err);
       }
 
       setTimeout(() => {
         setFeedback('idle');
         setSelectedAnswer(null);
         handleNext();
-      }, 1900);
+      }, 1600);
     } else {
       setFeedback('wrong');
-      await speakAI('Chưa đúng rồi, bé lắng nghe kỹ và chọn lại quả bóng khác nhé!');
+      // Phát âm thanh thể hiện đáp án sai - KHÔNG DÙNG GIỌNG ĐỌC
+      playWrongSoundEffect();
       setTimeout(() => {
         setFeedback('idle');
         setSelectedAnswer(null);
-      }, 1200);
+      }, 900);
     }
   };
 
@@ -287,7 +311,15 @@ export const BalloonPhonicsGame: React.FC<BalloonPhonicsGameProps> = ({
           <div className="relative z-10 bg-emerald-500 text-white rounded-2xl p-4 max-w-md mx-auto shadow-xl animate-bounce flex items-center justify-center gap-2.5">
             <CheckCircle2 className="w-6 h-6 text-amber-200" />
             <span className="text-base sm:text-lg font-black">
-              Búp! Bé đã trả lời rất chính xác! (+1 ⭐)
+              Ye, bé giỏiiii! (+1 ⭐)
+            </span>
+          </div>
+        )}
+        {feedback === 'wrong' && (
+          <div className="relative z-10 bg-rose-500 text-white rounded-2xl p-3.5 max-w-md mx-auto shadow-lg flex items-center justify-center gap-2.5">
+            <span className="text-xl">🎈</span>
+            <span className="text-base sm:text-lg font-black">
+              Bé thử lại nhé!
             </span>
           </div>
         )}

@@ -154,6 +154,20 @@ app.post('/api/tts', async (req, res) => {
       });
     }
 
+    if (audioCache.has(cleanedText)) {
+      return res.json({
+        audioBase64: audioCache.get(cleanedText),
+        cached: true,
+      });
+    }
+
+    if (audioCache.has(trimmedText)) {
+      return res.json({
+        audioBase64: audioCache.get(trimmedText),
+        cached: true,
+      });
+    }
+
     let audioBase64: string | undefined;
 
     // 1. Unified high-quality Vietnamese standard voice engine (100% accurate pronunciation, zero-quota limit, instant response)
